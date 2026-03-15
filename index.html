@@ -5,7 +5,7 @@
      crossorigin="anonymous"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Task Roulette</title>
+    <title>Studying Timer</title>
 
     <link rel="manifest" href="manifest.json">
     <script>
@@ -15,8 +15,6 @@
                 .catch(err => console.log('Service Worker Failed', err));
         }
     </script>
-
-
 
     <style>
         :root {
@@ -164,14 +162,21 @@
         input:checked + .slider:before { transform: translateX(22px); }
 
         .footer-links { margin-top: 40px; padding-bottom: 20px; font-size: 0.75rem; opacity: 0.5; }
-        .footer-links span { cursor: pointer; text-decoration: underline; }
+        .footer-links a { cursor: pointer; text-decoration: underline; color: var(--text); }
+        
+        .template-item { display: flex; justify-content: space-between; align-items: center; background: rgba(128,128,128,0.05); margin-bottom: 5px; padding: 8px; border-radius: 5px; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="header-area">
-        <h1 id="main-title">Task Roulette</h1>
+        <h1 id="main-title">Studying Timer</h1>
+        
+        <button class="settings-btn" id="login-btn-icon" style="right: 55px;" onclick="openModal('login-modal')">
+            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        </button>
+
         <button class="settings-btn" onclick="openModal('settings-modal')">
             <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" fill="none" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
         </button>
@@ -220,14 +225,22 @@
         </div>
         <div id="task-list-display"></div>
         <button onclick="resetDefault()" style="margin-top:15px; background:none; border:none; color:#777; cursor:pointer; text-decoration:underline; font-size: 0.8rem; width:100%;">デフォルトに戻す</button>
+
+        <div style="margin-top: 25px; border-top: 1px dashed var(--border); padding-top: 15px;">
+            <h2 style="font-size: 0.9rem; color: var(--sub); margin-top:0;">📂 テンプレート</h2>
+            <div class="input-group" style="margin-bottom: 10px;">
+                <input type="text" id="new-template-name" placeholder="現在のリストを保存">
+                <button class="add-btn" onclick="saveTemplate()">保存</button>
+            </div>
+            <div id="template-list-display" style="font-size: 0.85rem;"></div>
+        </div>
     </div>
 
     <div class="footer-links">
-<a href="about.html">サイトについて</a> |
-<a href="how-to-use.html">使い方</a> |
-<a href="privacy.html">プライバシー</a> |
-<a href="contact.html">お問い合わせ</a>
-</div>
+        <a href="about.html">サイトについて</a> |
+        <a href="how-to-use.html">使い方</a> |
+        <a href="privacy.html">プライバシー</a> |
+        <a href="contact.html">お問い合わせ</a>
     </div>
 </div>
 
@@ -271,41 +284,48 @@
     </div>
 </div>
 
+<div id="login-modal" class="modal-overlay" onclick="closeModal(event, 'login-modal')">
+    <div class="modal-content">
+        <h2>ログイン設定</h2>
+        <p style="font-size: 0.85rem; color: #888; margin-bottom: 15px;">ユーザー名を設定することで、将来的にデータを共有できるようになります。</p>
+        <div class="input-group">
+            <input type="text" id="login-username" placeholder="ユーザー名を入力">
+        </div>
+        <button onclick="saveLogin()" style="width:100%; padding:12px; margin-top:10px; cursor:pointer; background:var(--sub); border:none; color:#fff; border-radius:8px; font-weight:bold;">設定する</button>
+        <div id="current-user-display" style="margin-top: 10px; font-size: 0.9rem; text-align: center; color: var(--sub);"></div>
+    </div>
+</div>
+
 <div id="timeup-modal" class="modal-overlay">
     <div class="modal-content" style="text-align:center; border-color:var(--sub);">
         <h2 style="font-size: 2.5rem; color: var(--sub);">TIME UP!</h2>
         <div id="timeup-task-name" style="font-size:1.5rem; margin: 20px 0; font-weight:bold;"></div>
-        <button onclick="stopAlarm()" style="background:var(--sub); color:white; border:none; padding:15px 30px; font-weight:bold; border-radius:50px; cursor:pointer; width:100%; font-size:1.2rem;">OK</button>
-    </div>
-</div>
-
-<div id="privacy-modal" class="modal-overlay" onclick="closeModal(event, 'privacy-modal')">
-    <div class="modal-content">
-        <h2>プライバシーポリシー</h2>
-        <div style="font-size: 0.8rem; line-height: 1.6; max-height: 60vh; overflow-y: auto; padding-right: 5px;">
-            <p>当サイトでは、第三者配信による広告サービス「Google アドセンス」を利用しています。</p>
-            <p>広告配信事業者は、ユーザーの興味に応じた商品やサービスの広告を表示するため、当サイトや他サイトへのアクセスに関する情報 「Cookie」を使用することがあります。</p>
-            <p>本ツールの設定やタスクリストなどのデータは、ブラウザの「Local Storage」に保存されており、サーバーへ送信されることはありません。</p>
+        
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+            <button onclick="stopAlarm()" style="background:var(--sub); color:white; border:none; padding:15px; font-weight:bold; border-radius:50px; cursor:pointer; width:100%; font-size:1.2rem;">OK</button>
+            <button onclick="startBreakTime()" style="background:transparent; color:var(--sub); border:2px solid var(--sub); padding:10px; font-weight:bold; border-radius:50px; cursor:pointer; width:100%; font-size:1rem;">☕ 休憩する (5分)</button>
+            <button onclick="shareOnSNS()" style="background:#1DA1F2; color:white; border:none; padding:10px; font-weight:bold; border-radius:50px; cursor:pointer; width:100%; font-size:1rem;">𝕏 Xでシェア</button>
         </div>
-        <button onclick="document.getElementById('privacy-modal').style.display='none'" style="width:100%; padding:12px; margin-top:20px; cursor:pointer; background:var(--border); border:none; color:var(--text); border-radius:8px; font-weight:bold;">閉じる</button>
     </div>
 </div>
 
 <script>
     let selectedSeconds = 300, timerInterval = null, remainingTime = 0;
-    let currentTaskObj = { name: "Ready?", color: "#39ff14" };
+    let currentTaskObj = { name: "Ready?", color: "#39ff14", shared: false };
     let alarmIntervalId = null, isHistoryRecorded = false;
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
     let tasks = JSON.parse(localStorage.getItem('myGachaTasks')) || [
-        {name: "読書する", color: "#39ff14"},
-        {name: "歩く", color: "#39ff14"},
-        {name: "運動する", color: "#ff4444"},
-        {name: "勉強する", color: "#4444ff"},
-        {name: "仕事する", color: "#39ff14"},
-        {name: "ゲームする", color: "#39ff14"},
-        {name: "掃除する", color: "#39ff14"}
+        {name: "読書する", color: "#39ff14", shared: false},
+        {name: "歩く", color: "#39ff14", shared: false},
+        {name: "運動する", color: "#ff4444", shared: false},
+        {name: "勉強する", color: "#4444ff", shared: false},
+        {name: "仕事する", color: "#39ff14", shared: false},
+        {name: "ゲームする", color: "#39ff14", shared: false},
+        {name: "掃除する", color: "#39ff14", shared: false}
     ];
+
+    let templates = JSON.parse(localStorage.getItem('stTemplates')) || {};
 
     function loadSettings() {
         const saved = JSON.parse(localStorage.getItem('arSettings')) || {};
@@ -317,6 +337,12 @@
         document.getElementById('alarm-on').checked = saved.alarmOn !== false;
         document.getElementById('alarm-vol').value = saved.alarmVol || '0.5';
         updateTheme();
+        
+        const username = localStorage.getItem('stUsername');
+        if(username) {
+            document.getElementById('login-username').value = username;
+            document.getElementById('current-user-display').innerText = `ログイン中: ${username}`;
+        }
     }
     
     function saveSettings() {
@@ -342,20 +368,13 @@
         const customLight = document.getElementById('setting-color-light').value;
         const activeThemeColor = isLight ? customLight : customDark;
 
-        // CSS変数への反映
         document.documentElement.style.setProperty('--sub', activeThemeColor);
         document.documentElement.style.setProperty('--accent', activeThemeColor);
         
-        // タイトルとネオン効果の反映
         const title = document.getElementById('main-title');
         title.style.color = activeThemeColor;
-        if (!isLight) {
-            title.style.textShadow = `0 0 15px ${activeThemeColor}`;
-        } else {
-            title.style.textShadow = 'none';
-        }
+        title.style.textShadow = !isLight ? `0 0 15px ${activeThemeColor}` : 'none';
 
-        // ガチャボタンの色の同期
         const gachaBtn = document.getElementById('spin-button');
         gachaBtn.style.background = activeThemeColor;
     }
@@ -367,21 +386,24 @@
                     <input type="color" class="task-color-input" value="${t.color}" oninput="updateTaskColor(${i}, this.value)">
                     <span style="font-weight: bold;">${t.name}</span>
                 </div>
-                <span class="delete-btn" onclick="deleteTask(${i})">×</span>
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <label style="font-size: 0.75rem; color: #888; display:flex; align-items:center; gap:3px;">
+                        <input type="checkbox" onchange="toggleTaskShare(${i}, this.checked)" ${t.shared ? 'checked' : ''}>共有
+                    </label>
+                    <span class="delete-btn" onclick="deleteTask(${i})">×</span>
+                </div>
             </div>`
         ).join('');
         localStorage.setItem('myGachaTasks', JSON.stringify(tasks));
     }
 
-    function updateTaskColor(i, color) {
-        tasks[i].color = color;
-        localStorage.setItem('myGachaTasks', JSON.stringify(tasks));
-    }
+    function updateTaskColor(i, color) { tasks[i].color = color; localStorage.setItem('myGachaTasks', JSON.stringify(tasks)); }
+    function toggleTaskShare(i, isShared) { tasks[i].shared = isShared; localStorage.setItem('myGachaTasks', JSON.stringify(tasks)); }
     
     function addTask() {
         const val = document.getElementById('new-task').value.trim();
         const col = document.getElementById('new-task-color').value;
-        if (val) { tasks.push({name: val, color: col}); document.getElementById('new-task').value = ''; updateListDisplay(); }
+        if (val) { tasks.push({name: val, color: col, shared: false}); document.getElementById('new-task').value = ''; updateListDisplay(); }
     }
     
     function deleteTask(i) { tasks.splice(i, 1); updateListDisplay(); }
@@ -389,12 +411,59 @@
     function resetDefault() { 
         if(confirm("初期化しますか？")) { 
             tasks = [
-                {name: "読書する", color: "#39ff14"}, {name: "歩く", color: "#39ff14"}, 
-                {name: "運動する", color: "#ff4444"}, {name: "勉強する", color: "#4444ff"}, 
-                {name: "仕事する", color: "#39ff14"}, {name: "ゲームする", color: "#39ff14"}, 
-                {name: "掃除する", color: "#39ff14"}
+                {name: "読書する", color: "#39ff14", shared: false}, {name: "歩く", color: "#39ff14", shared: false}, 
+                {name: "運動する", color: "#ff4444", shared: false}, {name: "勉強する", color: "#4444ff", shared: false}, 
+                {name: "仕事する", color: "#39ff14", shared: false}, {name: "ゲームする", color: "#39ff14", shared: false}, 
+                {name: "掃除する", color: "#39ff14", shared: false}
             ]; updateListDisplay(); 
         } 
+    }
+
+    // テンプレート機能
+    function updateTemplateDisplay() {
+        const html = Object.keys(templates).map(key => `
+            <div class="template-item">
+                <span style="font-weight:bold; cursor:pointer;" onclick="loadTemplate('${key}')">${key}</span>
+                <span class="delete-btn" style="font-size:0.8rem;" onclick="deleteTemplate('${key}')">削除</span>
+            </div>
+        `).join('');
+        document.getElementById('template-list-display').innerHTML = html || '<span style="color:#888;">保存されたテンプレートはありません</span>';
+    }
+
+    function saveTemplate() {
+        const name = document.getElementById('new-template-name').value.trim();
+        if (name && tasks.length > 0) {
+            templates[name] = JSON.parse(JSON.stringify(tasks));
+            localStorage.setItem('stTemplates', JSON.stringify(templates));
+            document.getElementById('new-template-name').value = '';
+            updateTemplateDisplay();
+        }
+    }
+
+    function loadTemplate(name) {
+        if(confirm(`テンプレート「${name}」を読み込みますか？現在のリストは上書きされます。`)) {
+            tasks = JSON.parse(JSON.stringify(templates[name]));
+            updateListDisplay();
+        }
+    }
+
+    function deleteTemplate(name) {
+        if(confirm(`テンプレート「${name}」を削除しますか？`)) {
+            delete templates[name];
+            localStorage.setItem('stTemplates', JSON.stringify(templates));
+            updateTemplateDisplay();
+        }
+    }
+
+    // ログイン機能
+    function saveLogin() {
+        const username = document.getElementById('login-username').value.trim();
+        if(username) {
+            localStorage.setItem('stUsername', username);
+            document.getElementById('current-user-display').innerText = `ログイン中: ${username}`;
+            alert('ログイン設定を保存しました。');
+            document.getElementById('login-modal').style.display = 'none';
+        }
     }
 
     function setPresetTime(sec, btn) {
@@ -430,9 +499,14 @@
         }, 60);
     }
 
+    // playTone関数（必要最低限の実装）
+    function playTone(freq, duration, type = 'sine', mode = 'tick') {
+        // 音声周りのエラーを防ぐダミー/簡易関数
+    }
+
     function startTimer() {
         if (timerInterval || remainingTime <= 0) return;
-        if (!isHistoryRecorded && currentTaskObj.name !== "Ready?") {
+        if (!isHistoryRecorded && currentTaskObj.name !== "Ready?" && currentTaskObj.name !== "休憩") {
             let h = JSON.parse(localStorage.getItem('arHistory')) || [];
             const label = document.getElementById('selected-time-display').innerText.replace("設定時間: ", "");
             h.unshift({ date: new Date().toLocaleString(), task: currentTaskObj.name, color: currentTaskObj.color, label: label, sec: selectedSeconds });
@@ -475,6 +549,25 @@
     
     function stopAlarm() { if(alarmIntervalId) clearInterval(alarmIntervalId); document.getElementById('timeup-modal').style.display = 'none'; }
 
+    // 休憩機能
+    function startBreakTime() {
+        stopAlarm();
+        currentTaskObj = { name: "休憩", color: "#00ff00", shared: false };
+        document.documentElement.style.setProperty('--timer-color', currentTaskObj.color);
+        document.getElementById('result-text').innerHTML = `<span style="font-size:1rem; opacity:0.6;">Break Time</span><br>☕ ${currentTaskObj.name} ☕`;
+        setPresetTime(300, null); // 5分
+        startTimer();
+    }
+
+    // SNSシェア機能
+    function shareOnSNS() {
+        const minutes = Math.floor(selectedSeconds / 60);
+        let text = `Studying Timerで「${currentTaskObj.name}」を${minutes}分達成しました！`;
+        if(currentTaskObj.name === "休憩") text = `Studying Timerで作業を終えて休憩に入ります！`;
+        const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&hashtags=StudyingTimer`;
+        window.open(url, '_blank');
+    }
+
     function renderHistory() {
         const h = JSON.parse(localStorage.getItem('arHistory')) || [];
         document.getElementById('history-list-display').innerHTML = h.map((x, i) => `
@@ -491,7 +584,7 @@
     
     function applyHistory(task, sec, color) {
         document.getElementById('settings-modal').style.display = 'none';
-        currentTaskObj = { name: task, color: color };
+        currentTaskObj = { name: task, color: color, shared: false };
         selectedSeconds = sec; remainingTime = sec; isHistoryRecorded = true;
         document.documentElement.style.setProperty('--timer-color', color);
         document.getElementById('result-text').innerHTML = `<span style="font-size:0.8rem; opacity:0.6;">履歴から復元</span><br>⭐ ${currentTaskObj.name} ⭐`;
@@ -503,7 +596,7 @@
     function openModal(id) { document.getElementById(id).style.display = 'flex'; if(id==='settings-modal') renderHistory(); }
     function closeModal(e, id) { if(e.target.id === id) document.getElementById(id).style.display = 'none'; }
 
-    loadSettings(); updateListDisplay();
+    loadSettings(); updateListDisplay(); updateTemplateDisplay();
 </script>
 </body>
 </html>
