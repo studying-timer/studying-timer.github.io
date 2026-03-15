@@ -2,31 +2,56 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>プライバシーポリシー</title>
+<style>
+    :root {
+        --bg: #050505; --sub: #00f2ff; --text: #ffffff;
+        --card: #1a1a1a; --border: #333333;
+        --bg-pattern: linear-gradient(45deg, #0a0a0a 25%, transparent 25%, transparent 75%, #0a0a0a 75%, #0a0a0a),
+                      linear-gradient(45deg, #0a0a0a 25%, transparent 25%, transparent 75%, #0a0a0a 75%, #0a0a0a);
+        --bg-size: 20px 20px; --bg-pos: 0 0, 10px 10px;
+    }
+    body.light-mode {
+        --bg: #ecece7; --card: #f9f9f7; --text: #2c3e50; --border: #d1d1cf; --bg-pattern: none;
+    }
+    body {
+        font-family: 'Helvetica Neue', Arial, sans-serif;
+        background-color: var(--bg); color: var(--text);
+        background-image: var(--bg-pattern); background-size: var(--bg-size); background-position: var(--bg-pos);
+        margin: 0; display: flex; justify-content: center; min-height: 100vh; padding: 20px; box-sizing: border-box;
+        transition: background-color 0.4s ease, color 0.4s ease;
+    }
+    .container { width: 100%; max-width: 500px; text-align: center; }
+    .content-box { background: var(--card); border: 1px solid var(--border); border-radius: 15px; padding: 25px; text-align: left; }
+    h1 { font-size: 1.5rem; color: var(--sub); border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+    p { line-height: 1.6; }
+    .back-btn { display: inline-block; background: var(--sub); color: #fff; text-decoration: none; padding: 12px 20px; border-radius: 8px; font-weight: bold; margin-top: 20px; text-align: center; width: calc(100% - 40px); }
+</style>
 </head>
 <body>
 
-<h1>プライバシーポリシー</h1>
+<div class="container">
+    <div class="content-box">
+        <h1>プライバシーポリシー</h1>
+        <p>当サイトでは第三者配信の広告サービス「Google AdSense」を利用しています。</p>
+        <p>広告配信事業者はユーザーの興味に応じた広告を表示するためCookieを使用することがあります。</p>
+        <p>Cookieを無効にする設定およびGoogle AdSenseの詳細は以下をご覧ください。</p>
+        <p><a href="https://policies.google.com/technologies/ads" target="_blank" style="color: var(--sub);">https://policies.google.com/technologies/ads</a></p>
+        <a href="index.html" class="back-btn">ツールへ戻る</a>
+    </div>
+</div>
 
-<p>
-当サイトでは第三者配信の広告サービス
-「Google AdSense」を利用しています。
-</p>
-
-<p>
-広告配信事業者はユーザーの興味に応じた広告を表示するため
-Cookieを使用することがあります。
-</p>
-
-<p>
-Cookieを無効にする設定および
-Google AdSenseの詳細は
-以下をご覧ください。
-</p>
-
-<p>
-https://policies.google.com/technologies/ads
-</p>
-
+<script>
+    const saved = JSON.parse(localStorage.getItem('arSettings')) || {};
+    const mode = saved.theme || 'auto';
+    const isNight = new Date().getHours() >= 21 || new Date().getHours() < 7;
+    const isLight = mode === 'light' || (mode === 'auto' && !isNight);
+    if(isLight) document.body.classList.add('light-mode');
+    const customDark = saved.colorDark || '#00f2ff';
+    const customLight = saved.colorLight || '#0077cc';
+    const activeThemeColor = isLight ? customLight : customDark;
+    document.documentElement.style.setProperty('--sub', activeThemeColor);
+</script>
 </body>
 </html>
