@@ -18,7 +18,6 @@
 
     <style>
         :root {
-            /* ナイトモード時（デフォルト） */
             --bg: #050505;
             --accent: #ff007b;
             --sub: #00f2ff;
@@ -61,20 +60,23 @@
         .container { width: 100%; max-width: 500px; text-align: center; position: relative; }
 
         .header-area {
-            display: flex; align-items: center; justify-content: center;
+            display: flex; align-items: center; justify-content: space-between;
             position: relative; width: 100%; margin-bottom: 20px; padding-top: 10px;
         }
 
         h1 { 
-            font-size: 1.8rem; letter-spacing: 5px; color: var(--sub); 
+            font-size: 1.6rem; letter-spacing: 2px; color: var(--sub); 
             margin: 0; text-transform: uppercase; transition: 0.4s;
-            padding: 0 45px;
+            text-align: left; flex-grow: 1;
+        }
+
+        .header-controls {
+            display: flex; gap: 8px; align-items: center;
         }
 
         .settings-btn {
-            position: absolute; right: 0;
             background: rgba(128, 128, 128, 0.1); border: 1px solid var(--sub); border-radius: 50%;
-            width: 44px; height: 44px; display: flex; justify-content: center; align-items: center;
+            width: 40px; height: 40px; display: flex; justify-content: center; align-items: center;
             cursor: pointer; color: var(--sub); transition: 0.3s;
         }
 
@@ -173,13 +175,17 @@
     <div class="header-area">
         <h1 id="main-title">Studying Timer</h1>
         
-        <button class="settings-btn" id="login-btn-icon" style="right: 55px;" onclick="openModal('login-modal')">
-            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-        </button>
-
-        <button class="settings-btn" onclick="openModal('settings-modal')">
-            <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" fill="none" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-        </button>
+        <div class="header-controls">
+            <button class="settings-btn" onclick="openModal('ranking-modal')">
+                🏆
+            </button>
+            <button class="settings-btn" id="login-btn-icon" onclick="openModal('login-modal')">
+                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            </button>
+            <button class="settings-btn" onclick="openModal('settings-modal')">
+                <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" fill="none" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            </button>
+        </div>
     </div>
     
     <div class="time-settings">
@@ -293,6 +299,30 @@
         </div>
         <button onclick="saveLogin()" style="width:100%; padding:12px; margin-top:10px; cursor:pointer; background:var(--sub); border:none; color:#fff; border-radius:8px; font-weight:bold;">設定する</button>
         <div id="current-user-display" style="margin-top: 10px; font-size: 0.9rem; text-align: center; color: var(--sub);"></div>
+    </div>
+</div>
+
+<div id="ranking-modal" class="modal-overlay" onclick="closeModal(event, 'ranking-modal')">
+    <div class="modal-content">
+        <h2>📊 データ共有・ランキング</h2>
+        <p style="font-size: 0.8rem; color:#888; margin-top:-10px; margin-bottom:15px;">※現在はデモ画面です。将来的にサーバーと連携して実際のデータが表示されます。</p>
+        
+        <h3 style="font-size: 1rem; color: var(--sub);">👥 友達の学習時間 (共有タスク)</h3>
+        <div id="friends-time-list" style="font-size: 0.9rem; margin-bottom: 20px; background: rgba(128,128,128,0.1); padding: 10px; border-radius: 8px; max-height: 120px; overflow-y: auto;">
+            </div>
+
+        <h3 style="font-size: 1rem; color: var(--sub);">🌍 全体ランキング (Top 100)</h3>
+        <div style="display:flex; gap:5px; margin-bottom: 10px;">
+            <button style="flex:1; padding:5px; background:var(--sub); color:#fff; border:none; border-radius:5px; cursor:pointer;">週間</button>
+            <button style="flex:1; padding:5px; background:transparent; color:var(--text); border:1px solid var(--border); border-radius:5px; cursor:pointer;">月間</button>
+            <button style="flex:1; padding:5px; background:transparent; color:var(--text); border:1px solid var(--border); border-radius:5px; cursor:pointer;">年間</button>
+        </div>
+        <div style="font-size: 0.9rem; background: rgba(128,128,128,0.1); padding: 10px; border-radius: 8px; height: 120px; overflow-y: auto;">
+            <div style="display:flex; justify-content:space-between; border-bottom:1px solid var(--border); padding:5px 0;"><span>1位: ユーザーA</span><span>45時間 30分</span></div>
+            <div style="display:flex; justify-content:space-between; border-bottom:1px solid var(--border); padding:5px 0;"><span>2位: ユーザーB</span><span>42時間 15分</span></div>
+            <div style="display:flex; justify-content:space-between; padding:5px 0;"><span>3位: ユーザーC</span><span>38時間 00分</span></div>
+        </div>
+        <button onclick="document.getElementById('ranking-modal').style.display='none'" style="width:100%; padding:12px; margin-top:20px; cursor:pointer; background:var(--border); border:none; color:var(--text); border-radius:8px; font-weight:bold;">閉じる</button>
     </div>
 </div>
 
@@ -483,6 +513,7 @@
 
     function spin() {
         if (!tasks.length) return;
+        if (audioCtx.state === 'suspended') audioCtx.resume(); // 音声コンテキストの許可
         document.getElementById('timer-section').style.display = 'none';
         resetTimer(); isHistoryRecorded = false;
         let count = 0;
@@ -499,13 +530,47 @@
         }, 60);
     }
 
-    // playTone関数（必要最低限の実装）
+    // Web Audio APIを用いた音声合成（秒針・アラーム）
     function playTone(freq, duration, type = 'sine', mode = 'tick') {
-        // 音声周りのエラーを防ぐダミー/簡易関数
+        try {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            
+            if (mode === 'tick' && !document.getElementById('tick-on').checked) return;
+            if (mode === 'alarm' && !document.getElementById('alarm-on').checked) return;
+            
+            const volStr = mode === 'tick' ? document.getElementById('tick-vol').value : document.getElementById('alarm-vol').value;
+            const maxVol = parseFloat(volStr) || 0.5;
+
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+
+            gainNode.gain.setValueAtTime(maxVol, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            osc.start();
+            osc.stop(audioCtx.currentTime + duration);
+        } catch(e) { console.log("Audio play error", e); }
+    }
+
+    // タスクの累計時間を保存する機能
+    function accumulateTaskTime(seconds) {
+        if (!currentTaskObj || currentTaskObj.name === "Ready?" || currentTaskObj.name === "休憩") return;
+        let stats = JSON.parse(localStorage.getItem('stTaskStats')) || {};
+        if (!stats[currentTaskObj.name]) stats[currentTaskObj.name] = 0;
+        stats[currentTaskObj.name] += seconds;
+        localStorage.setItem('stTaskStats', JSON.stringify(stats));
     }
 
     function startTimer() {
         if (timerInterval || remainingTime <= 0) return;
+        if (audioCtx.state === 'suspended') audioCtx.resume(); // 音声コンテキストの許可
+
         if (!isHistoryRecorded && currentTaskObj.name !== "Ready?" && currentTaskObj.name !== "休憩") {
             let h = JSON.parse(localStorage.getItem('arHistory')) || [];
             const label = document.getElementById('selected-time-display').innerText.replace("設定時間: ", "");
@@ -516,7 +581,10 @@
         document.getElementById('btn-start').classList.add('active-ctrl');
         document.getElementById('btn-pause').classList.remove('active-ctrl');
         timerInterval = setInterval(() => {
-            remainingTime--; updateTimerDisplay();
+            remainingTime--; 
+            updateTimerDisplay();
+            accumulateTaskTime(1); // 1秒ごとに累計時間を加算
+            
             if (remainingTime > 0) playTone(880, 0.05, 'square', 'tick');
             if (remainingTime <= 0) { clearInterval(timerInterval); triggerTimeUp(); }
         }, 1000);
@@ -593,7 +661,26 @@
         updateTimerDisplay(); document.getElementById('timer-section').style.display = 'block';
     }
 
-    function openModal(id) { document.getElementById(id).style.display = 'flex'; if(id==='settings-modal') renderHistory(); }
+    function renderRankingMock() {
+        let stats = JSON.parse(localStorage.getItem('stTaskStats')) || {};
+        let html = Object.keys(stats).map(task => {
+            let h = Math.floor(stats[task] / 3600);
+            let m = Math.floor((stats[task] % 3600) / 60);
+            return `<div style="display:flex; justify-content:space-between; padding: 4px 0; border-bottom: 1px solid var(--border);">
+                <span style="font-weight:bold;">${task}</span><span>${h}時間${m}分</span>
+            </div>`;
+        }).join('');
+        if(!html) html = '<div style="color:#888; text-align:center;">まだ学習記録がありません</div>';
+        
+        document.getElementById('friends-time-list').innerHTML = 
+            `<div style="font-size:0.75rem; color:#888; margin-bottom:10px;">※現在はご自身のローカル累計時間を表示しています</div>` + html;
+    }
+
+    function openModal(id) { 
+        document.getElementById(id).style.display = 'flex'; 
+        if(id==='settings-modal') renderHistory(); 
+        if(id==='ranking-modal') renderRankingMock();
+    }
     function closeModal(e, id) { if(e.target.id === id) document.getElementById(id).style.display = 'none'; }
 
     loadSettings(); updateListDisplay(); updateTemplateDisplay();
