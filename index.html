@@ -35,95 +35,73 @@
             --bg-pos: 0 0, 10px 10px;
         }
 
-        body.light-mode {
-            --bg: #ecece7;
-            --card: #f9f9f7;
-            --text: #2c3e50;
-            --border: #d1d1cf;
-            --input-bg: #ffffff;
-            --ctrl-active-bg: rgba(0, 0, 0, 0.05);
-            --bg-pattern: none;
-        }
+        /* --- Theme Colors --- */
+        body.light-mode { --bg: #ecece7; --card: #f9f9f7; --text: #2c3e50; --border: #d1d1cf; --input-bg: #ffffff; --ctrl-active-bg: rgba(0, 0, 0, 0.05); --bg-pattern: none; }
+        body.theme-pastel { --bg: #fdf6e3; --card: #eee8d5; --text: #657b83; --border: #ccc; --input-bg: #fff; --bg-pattern: none; }
+        body.theme-cyber { --bg: #000b18; --card: #001f3f; --text: #0ff; --border: #0074d9; --input-bg: #000; --bg-pattern: linear-gradient(0deg, transparent 24%, rgba(0, 255, 255, 0.1) 25%, rgba(0, 255, 255, 0.1) 26%, transparent 27%, transparent 74%, rgba(0, 255, 255, 0.1) 75%, rgba(0, 255, 255, 0.1) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(0, 255, 255, 0.1) 25%, rgba(0, 255, 255, 0.1) 26%, transparent 27%, transparent 74%, rgba(0, 255, 255, 0.1) 75%, rgba(0, 255, 255, 0.1) 76%, transparent 77%, transparent); --bg-size: 50px 50px; }
+        body.theme-royal { --bg: #1a0033; --card: #330066; --text: #ffd700; --border: #9932cc; --input-bg: #2a004d; --bg-pattern: none; }
 
         body {
             font-family: 'Helvetica Neue', Arial, sans-serif;
             background-color: var(--bg); color: var(--text);
-            background-image: var(--bg-pattern);
-            background-size: var(--bg-size);
-            background-position: var(--bg-pos);
+            background-image: var(--bg-pattern); background-size: var(--bg-size); background-position: var(--bg-pos);
             margin: 0; display: flex; justify-content: center;
             min-height: 100vh; padding: 20px; box-sizing: border-box;
             transition: background-color 0.4s ease, color 0.4s ease;
             -webkit-tap-highlight-color: transparent;
         }
 
-        .container { width: 100%; max-width: 500px; text-align: center; position: relative; }
+        .container { width: 100%; max-width: 500px; text-align: center; position: relative; z-index: 10; }
 
-        .header-area {
-            display: flex; align-items: center; justify-content: space-between;
-            position: relative; width: 100%; margin-bottom: 20px; padding-top: 10px;
-        }
+        .header-area { display: flex; align-items: center; justify-content: space-between; position: relative; width: 100%; margin-bottom: 10px; padding-top: 10px; }
+        
+        h1 { font-size: 1.6rem; letter-spacing: 2px; color: var(--sub); margin: 0; text-transform: uppercase; transition: 0.4s; text-align: left; flex-grow: 1; }
 
-        h1 { 
-            font-size: 1.6rem; letter-spacing: 2px; color: var(--sub); 
-            margin: 0; text-transform: uppercase; transition: 0.4s;
-            text-align: left; flex-grow: 1;
-        }
+        .header-controls { display: flex; gap: 8px; align-items: center; }
+        .settings-btn { background: rgba(128, 128, 128, 0.1); border: 1px solid var(--sub); border-radius: 50%; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; cursor: pointer; color: var(--sub); transition: 0.3s; font-size: 1.2rem; }
 
-        .header-controls {
-            display: flex; gap: 8px; align-items: center;
-        }
+        /* --- Visual Rewards (Crowns & Auras) --- */
+        .crown-bronze { filter: sepia(1) hue-rotate(-50deg) saturate(3); font-size: 1.3rem; }
+        .crown-silver { filter: grayscale(1) brightness(1.5); box-shadow: 0 0 10px rgba(255,255,255,0.5); }
+        .crown-gold { filter: drop-shadow(0 0 5px gold); animation: pulse-gold 2s infinite; }
+        .crown-god { background: linear-gradient(45deg, red, orange, yellow, green, blue, indigo, violet); -webkit-background-clip: text; color: transparent; animation: float-god 3s ease-in-out infinite; text-shadow: 0 0 10px rgba(255,255,255,0.8); }
+        
+        @keyframes pulse-gold { 0% { filter: drop-shadow(0 0 3px gold); } 50% { filter: drop-shadow(0 0 12px gold); } 100% { filter: drop-shadow(0 0 3px gold); } }
+        @keyframes float-god { 0% { transform: translateY(0px); } 50% { transform: translateY(-4px); } 100% { transform: translateY(0px); } }
 
-        .settings-btn {
-            background: rgba(128, 128, 128, 0.1); border: 1px solid var(--sub); border-radius: 50%;
-            width: 40px; height: 40px; display: flex; justify-content: center; align-items: center;
-            cursor: pointer; color: var(--sub); transition: 0.3s;
-        }
+        body.aura-glow #timer-section { box-shadow: 0 0 30px var(--timer-color); border-width: 2px; }
+        body.aura-particles::before { content: ''; position: fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:1; background: radial-gradient(circle, rgba(255,255,255,0.05) 10%, transparent 20%); background-size: 30px 30px; animation: snow 10s linear infinite; }
+        @keyframes snow { from { background-position: 0 0; } to { background-position: 0 600px; } }
+        body.aura-stars::after { content: ''; position: fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; background-image: radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px); background-size: 150px 150px; opacity: 0.3; }
+        body.crystal-font #timer-display { font-family: 'Courier New', Courier, monospace; text-shadow: 0 0 15px var(--timer-color); letter-spacing: 2px; }
+        body.god-mode #timer-display { background: linear-gradient(45deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #8f00ff); -webkit-background-clip: text; color: transparent; animation: hue-rotate 5s linear infinite; }
+        @keyframes hue-rotate { from { filter: hue-rotate(0deg); } to { filter: hue-rotate(360deg); } }
 
-        .time-settings, .list-manager, .modal-content { 
-            background: var(--card); border: 1px solid var(--border); border-radius: 15px; transition: 0.4s;
-        }
+        /* --- Progress Bar --- */
+        .level-stats { display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: bold; margin-bottom: 5px; }
+        .level-bar-container { width: 100%; height: 8px; background: rgba(128,128,128,0.2); border-radius: 4px; margin-bottom: 20px; overflow: hidden; position: relative; border: 1px solid var(--border); }
+        .level-bar-fill { height: 100%; width: 0%; background: var(--sub); transition: width 0.5s ease; box-shadow: 0 0 10px var(--sub); }
 
+        .time-settings, .list-manager, .modal-content { background: var(--card); border: 1px solid var(--border); border-radius: 15px; transition: 0.4s; }
         .time-settings { padding: 15px; margin-bottom: 20px; }
         .time-settings h2 { font-size: 1rem; margin-top: 0; color: var(--sub); }
-        
         .preset-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 15px; }
         .time-btn { background: var(--input-bg); color: var(--text); border: 1px solid var(--border); padding: 8px; border-radius: 8px; cursor: pointer; transition: 0.2s; font-size: 0.9rem; }
         .time-btn.active { background: rgba(128, 128, 128, 0.15); color: var(--sub); border: 2px solid var(--sub); font-weight: bold; }
-        
         .custom-time { display: flex; justify-content: center; align-items: center; gap: 10px; margin-bottom: 10px; }
         .custom-time input { width: 60px; background: var(--input-bg); border: 1px solid var(--border); color: var(--text); padding: 5px; border-radius: 5px; text-align: center; font-size: 16px; }
         #selected-time-display { font-weight: bold; color: var(--sub); margin-top: 5px; }
 
-        #display-area {
-            min-height: 120px; display: flex; flex-direction: column; justify-content: center; align-items: center;
-            font-size: 1.4rem; font-weight: bold; border: 2px solid var(--sub); border-radius: 20px; margin-bottom: 20px;
-            background: rgba(128, 128, 128, 0.05); padding: 20px;
-        }
-
-        .gacha-btn {
-            width: 100%; padding: 1.2rem; font-size: 1.2rem; font-weight: bold;
-            background: linear-gradient(45deg, var(--sub), var(--sub)); color: white; border: none; border-radius: 50px;
-            cursor: pointer; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); margin-bottom: 20px;
-            transition: opacity 0.2s;
-        }
+        #display-area { min-height: 120px; display: flex; flex-direction: column; justify-content: center; align-items: center; font-size: 1.4rem; font-weight: bold; border: 2px solid var(--sub); border-radius: 20px; margin-bottom: 20px; background: rgba(128, 128, 128, 0.05); padding: 20px; }
+        .gacha-btn { width: 100%; padding: 1.2rem; font-size: 1.2rem; font-weight: bold; background: linear-gradient(45deg, var(--sub), var(--sub)); color: white; border: none; border-radius: 50px; cursor: pointer; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); margin-bottom: 20px; transition: opacity 0.2s; }
         .gacha-btn:active { opacity: 0.8; }
 
-        #timer-section {
-            display: none; background: var(--input-bg); border: 1px solid var(--timer-color); border-radius: 15px;
-            padding: 20px; margin-bottom: 20px; box-shadow: 0 0 20px rgba(57, 255, 20, 0.1);
-        }
+        #timer-section { display: none; background: var(--input-bg); border: 1px solid var(--timer-color); border-radius: 15px; padding: 20px; margin-bottom: 20px; position: relative; }
         #timer-display { font-size: 3rem; font-weight: bold; font-family: 'Consolas', monospace; color: var(--timer-color); margin-bottom: 15px; }
         
         .timer-controls { display: flex; justify-content: center; gap: 10px; }
-        .timer-controls button {
-            flex: 1; background: transparent; color: var(--timer-color); border: 1px solid var(--timer-color);
-            padding: 10px 0; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.2s;
-        }
-        .timer-controls button.active-ctrl {
-            background-color: var(--timer-color) !important;
-            color: var(--bg) !important;
-        }
+        .timer-controls button { flex: 1; background: transparent; color: var(--timer-color); border: 1px solid var(--timer-color); padding: 10px 0; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        .timer-controls button.active-ctrl { background-color: var(--timer-color) !important; color: var(--bg) !important; }
 
         .list-manager { padding: 20px; text-align: left; margin-bottom: 20px; }
         .input-group { display: flex; gap: 10px; margin-bottom: 15px; align-items: center; }
@@ -136,21 +114,13 @@
         .task-color-input { width: 28px; height: 28px; border: none; background: transparent; cursor: pointer; padding: 0; border-radius: 50%; overflow: hidden; flex-shrink: 0; }
         .delete-btn { color: #ff4444; cursor: pointer; font-weight: bold; padding: 0 10px; }
 
-        .modal-overlay {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.7); z-index: 100; justify-content: center; align-items: center; backdrop-filter: blur(4px);
-        }
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center; backdrop-filter: blur(4px); }
         .modal-content { padding: 25px; width: 90%; max-width: 400px; max-height: 85vh; overflow-y: auto; text-align: left; border: 1px solid var(--sub); }
         .modal-content h2 { font-size: 1.2rem; color: var(--sub); border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-top: 0; }
         
         .setting-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; font-size: 0.9rem; }
-        
         .history-list { margin-top: 10px; font-size: 0.85rem; }
-        .history-item { 
-            border-bottom: 1px solid var(--border); padding: 12px 8px; 
-            display: flex; justify-content: space-between; align-items: center;
-            cursor: pointer; transition: 0.2s; border-radius: 5px; gap: 5px;
-        }
+        .history-item { border-bottom: 1px solid var(--border); padding: 12px 8px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.2s; border-radius: 5px; gap: 5px; }
         .history-item:hover { background: rgba(128, 128, 128, 0.1); }
         .history-main { display: flex; flex-direction: column; flex-grow: 1; overflow: hidden; }
         .history-task { font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -165,7 +135,6 @@
 
         .footer-links { margin-top: 40px; padding-bottom: 20px; font-size: 0.75rem; opacity: 0.5; }
         .footer-links a { cursor: pointer; text-decoration: underline; color: var(--text); }
-        
         .template-item { display: flex; justify-content: space-between; align-items: center; background: rgba(128,128,128,0.05); margin-bottom: 5px; padding: 8px; border-radius: 5px; }
     </style>
 </head>
@@ -174,11 +143,8 @@
 <div class="container">
     <div class="header-area">
         <h1 id="main-title">Studying Timer</h1>
-        
         <div class="header-controls">
-            <button class="settings-btn" onclick="openModal('ranking-modal')">
-                🏆
-            </button>
+            <button class="settings-btn" id="btn-crown-icon" onclick="openModal('status-modal')">🏆</button>
             <button class="settings-btn" id="login-btn-icon" onclick="openModal('login-modal')">
                 <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
             </button>
@@ -186,6 +152,14 @@
                 <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" fill="none" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
             </button>
         </div>
+    </div>
+
+    <div class="level-stats">
+        <span style="color:var(--sub);">Lv.<span id="main-lv">1</span></span>
+        <span style="color:var(--accent);">Buff x<span id="main-buff">1.00</span></span>
+    </div>
+    <div class="level-bar-container">
+        <div class="level-bar-fill" id="level-bar-fill"></div>
     </div>
     
     <div class="time-settings">
@@ -256,10 +230,7 @@
         <div class="setting-row">
             <label>テーマ変更</label>
             <select id="setting-theme" onchange="saveSettings()" style="background:var(--input-bg); color:var(--text); border:1px solid var(--sub); padding:5px; border-radius:5px;">
-                <option value="auto">自動</option>
-                <option value="dark">ダーク</option>
-                <option value="light">ライト</option>
-            </select>
+                </select>
         </div>
         <div class="setting-row">
             <label>全体カラー (ダーク時)</label>
@@ -302,27 +273,26 @@
     </div>
 </div>
 
-<div id="ranking-modal" class="modal-overlay" onclick="closeModal(event, 'ranking-modal')">
+<div id="status-modal" class="modal-overlay" onclick="closeModal(event, 'status-modal')">
     <div class="modal-content">
-        <h2>📊 データ共有・ランキング</h2>
-        <p style="font-size: 0.8rem; color:#888; margin-top:-10px; margin-bottom:15px;">※現在はデモ画面です。将来的にサーバーと連携して実際のデータが表示されます。</p>
+        <h2>🏆 ステータス・実績</h2>
         
-        <h3 style="font-size: 1rem; color: var(--sub);">👥 友達の学習時間 (共有タスク)</h3>
-        <div id="friends-time-list" style="font-size: 0.9rem; margin-bottom: 20px; background: rgba(128,128,128,0.1); padding: 10px; border-radius: 8px; max-height: 120px; overflow-y: auto;">
-            </div>
+        <div style="text-align:center; font-size: 2.5rem; margin:10px 0; min-height:50px;" id="status-crown">👑</div>
+        <div style="text-align:center; font-size: 1.5rem; color:var(--sub); font-weight:bold;">Lv.<span id="status-level">1</span></div>
+        <p style="text-align:center; margin:5px 0;">称号: <span id="status-title" style="font-weight:bold;">努力の卵</span></p>
+        
+        <div style="background:rgba(128,128,128,0.1); padding:15px; border-radius:10px; margin:15px 0;">
+            <p style="margin:0 0 5px 0; font-size:0.9rem;">累計学習: <strong id="status-total-time">0時間0分</strong></p>
+            <p style="margin:0 0 5px 0; font-size:0.9rem;">継続日数: <strong id="status-days">1日</strong></p>
+            <p style="margin:0 0 5px 0; font-size:0.9rem;">現在のExp倍率: <strong id="status-buff-display" style="color:var(--accent);">x1.00</strong></p>
+            <p style="margin:0; font-size:0.9rem;">所持スキップ券: <strong id="status-skip" style="color:#aaa;">0枚</strong> <span style="font-size:0.6rem;">(※Single Stage用)</span></p>
+        </div>
+        
+        <h3 style="font-size:1rem; color:var(--sub);">✨ 解禁された特典</h3>
+        <ul id="status-perks" style="font-size:0.85rem; padding-left:20px; color:#ddd; line-height: 1.6;">
+            </ul>
 
-        <h3 style="font-size: 1rem; color: var(--sub);">🌍 全体ランキング (Top 100)</h3>
-        <div style="display:flex; gap:5px; margin-bottom: 10px;">
-            <button style="flex:1; padding:5px; background:var(--sub); color:#fff; border:none; border-radius:5px; cursor:pointer;">週間</button>
-            <button style="flex:1; padding:5px; background:transparent; color:var(--text); border:1px solid var(--border); border-radius:5px; cursor:pointer;">月間</button>
-            <button style="flex:1; padding:5px; background:transparent; color:var(--text); border:1px solid var(--border); border-radius:5px; cursor:pointer;">年間</button>
-        </div>
-        <div style="font-size: 0.9rem; background: rgba(128,128,128,0.1); padding: 10px; border-radius: 8px; height: 120px; overflow-y: auto;">
-            <div style="display:flex; justify-content:space-between; border-bottom:1px solid var(--border); padding:5px 0;"><span>1位: ユーザーA</span><span>45時間 30分</span></div>
-            <div style="display:flex; justify-content:space-between; border-bottom:1px solid var(--border); padding:5px 0;"><span>2位: ユーザーB</span><span>42時間 15分</span></div>
-            <div style="display:flex; justify-content:space-between; padding:5px 0;"><span>3位: ユーザーC</span><span>38時間 00分</span></div>
-        </div>
-        <button onclick="document.getElementById('ranking-modal').style.display='none'" style="width:100%; padding:12px; margin-top:20px; cursor:pointer; background:var(--border); border:none; color:var(--text); border-radius:8px; font-weight:bold;">閉じる</button>
+        <button onclick="document.getElementById('status-modal').style.display='none'" style="width:100%; padding:12px; margin-top:20px; cursor:pointer; background:var(--border); border:none; color:var(--text); border-radius:8px; font-weight:bold;">閉じる</button>
     </div>
 </div>
 
@@ -340,38 +310,155 @@
 </div>
 
 <script>
+    /* --- グローバル変数 --- */
     let selectedSeconds = 300, timerInterval = null, remainingTime = 0;
     let currentTaskObj = { name: "Ready?", color: "#39ff14", shared: false };
     let alarmIntervalId = null, isHistoryRecorded = false;
+    let sessionExp = 0; // 今回のタイマーで稼いだ経験値（分数）
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
     let tasks = JSON.parse(localStorage.getItem('myGachaTasks')) || [
-        {name: "読書する", color: "#39ff14", shared: false},
-        {name: "歩く", color: "#39ff14", shared: false},
-        {name: "運動する", color: "#ff4444", shared: false},
-        {name: "勉強する", color: "#4444ff", shared: false},
-        {name: "仕事する", color: "#39ff14", shared: false},
-        {name: "ゲームする", color: "#39ff14", shared: false},
+        {name: "読書する", color: "#39ff14", shared: false}, {name: "歩く", color: "#39ff14", shared: false},
+        {name: "運動する", color: "#ff4444", shared: false}, {name: "勉強する", color: "#4444ff", shared: false},
+        {name: "仕事する", color: "#39ff14", shared: false}, {name: "ゲームする", color: "#39ff14", shared: false},
         {name: "掃除する", color: "#39ff14", shared: false}
     ];
-
     let templates = JSON.parse(localStorage.getItem('stTemplates')) || {};
 
+    /* --- レベル・バフ関連ロジック --- */
+    
+    // 午前6時切り替えの論理日付取得
+    function getLogicalDateStr() {
+        let d = new Date();
+        d.setHours(d.getHours() - 6);
+        return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+    }
+
+    // 継続日数のチェックと更新
+    function checkConsecutiveDays() {
+        let lastLogical = localStorage.getItem('stLastRunDate');
+        let currentLogical = getLogicalDateStr();
+        let days = parseInt(localStorage.getItem('stConsecutiveDays')) || 0;
+
+        if (!lastLogical) {
+            days = 1;
+        } else if (lastLogical !== currentLogical) {
+            let lastD = new Date(lastLogical);
+            let currD = new Date(currentLogical);
+            let diffTime = Math.abs(currD - lastD);
+            let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            
+            if (diffDays === 1) { days += 1; } 
+            else { days = 1; } // 途切れた場合リセット
+        }
+        
+        localStorage.setItem('stConsecutiveDays', days);
+        localStorage.setItem('stLastRunDate', currentLogical);
+        return days;
+    }
+
+    // 100日ごとに+1されるバフ倍率計算
+    function getBuffMultiplier() {
+        let days = parseInt(localStorage.getItem('stConsecutiveDays')) || 1;
+        if (days < 1) days = 1;
+        let cycle = Math.floor((days - 1) / 100);
+        let rem = (days - 1) % 100;
+        return Math.pow(1.00695, rem) + cycle;
+    }
+
+    // レベル計算ロジック
+    function getLevelData(exp) {
+        let currentExp = 0;
+        let level = 1;
+        while (true) {
+            let req = Math.round(47.52 * level);
+            if (level === 100) req = 4776; 
+            if (level > 100) req = Math.round(47.52 * level);
+
+            if (exp >= currentExp + req) {
+                currentExp += req;
+                level++;
+            } else {
+                return {
+                    level: level,
+                    progressExp: exp - currentExp,
+                    reqExp: req,
+                    progressPct: Math.min(100, ((exp - currentExp) / req) * 100)
+                };
+            }
+        }
+    }
+
+    // UIと視覚報酬の更新
+    function updateExpVisuals(save = false) {
+        let total = (parseFloat(localStorage.getItem('stTotalExp')) || 0) + sessionExp;
+        if (save && sessionExp > 0) {
+            localStorage.setItem('stTotalExp', total);
+            sessionExp = 0;
+        }
+
+        let data = getLevelData(total);
+        let buff = getBuffMultiplier();
+
+        document.getElementById('main-lv').innerText = data.level;
+        document.getElementById('main-buff').innerText = buff.toFixed(2);
+        document.getElementById('level-bar-fill').style.width = data.progressPct + '%';
+
+        applyVisualRewards(data.level);
+        updateThemeSelect(data.level);
+    }
+
+    function applyVisualRewards(level) {
+        // Body クラスの切り替え
+        document.body.classList.toggle('aura-glow', level >= 20);
+        document.body.classList.toggle('aura-particles', level >= 50);
+        document.body.classList.toggle('aura-stars', level >= 80);
+        document.body.classList.toggle('crystal-font', level >= 90);
+        document.body.classList.toggle('god-mode', level >= 100);
+
+        // 王冠アイコンの更新
+        let btnIcon = document.getElementById('btn-crown-icon');
+        btnIcon.innerText = level >= 100 ? "👑✨" : (level >= 30 ? "👑" : "🏆");
+        btnIcon.className = "settings-btn";
+        if (level >= 100) btnIcon.classList.add("crown-god");
+        else if (level >= 90) btnIcon.classList.add("crown-gold");
+        else if (level >= 60) btnIcon.classList.add("crown-silver");
+        else if (level >= 30) btnIcon.classList.add("crown-bronze");
+    }
+
+    /* --- 設定・テーマ・UI --- */
     function loadSettings() {
         const saved = JSON.parse(localStorage.getItem('arSettings')) || {};
-        document.getElementById('setting-theme').value = saved.theme || 'auto';
         document.getElementById('setting-color-dark').value = saved.colorDark || '#00f2ff';
         document.getElementById('setting-color-light').value = saved.colorLight || '#0077cc';
         document.getElementById('tick-on').checked = saved.tickOn !== false;
         document.getElementById('tick-vol').value = saved.tickVol || '0.3';
         document.getElementById('alarm-on').checked = saved.alarmOn !== false;
         document.getElementById('alarm-vol').value = saved.alarmVol || '0.5';
+        
+        let total = parseFloat(localStorage.getItem('stTotalExp')) || 0;
+        let data = getLevelData(total);
+        updateThemeSelect(data.level);
+        document.getElementById('setting-theme').value = saved.theme || 'auto';
+
         updateTheme();
         
         const username = localStorage.getItem('stUsername');
         if(username) {
             document.getElementById('login-username').value = username;
             document.getElementById('current-user-display').innerText = `ログイン中: ${username}`;
+        }
+    }
+
+    function updateThemeSelect(level) {
+        let savedTheme = document.getElementById('setting-theme').value;
+        let html = `<option value="auto">自動</option><option value="dark">ダーク</option><option value="light">ライト</option>`;
+        if (level >= 10) html += `<option value="pastel">パステル [Lv.10]</option>`;
+        if (level >= 40) html += `<option value="cyber">サイバー [Lv.40]</option>`;
+        if (level >= 70) html += `<option value="royal">ロイヤル [Lv.70]</option>`;
+        document.getElementById('setting-theme').innerHTML = html;
+        if(document.querySelector(`#setting-theme option[value="${savedTheme}"]`)) {
+            document.getElementById('setting-theme').value = savedTheme;
         }
     }
     
@@ -391,111 +478,34 @@
     function updateTheme() {
         const mode = document.getElementById('setting-theme').value;
         const isNight = new Date().getHours() >= 21 || new Date().getHours() < 7;
-        const isLight = mode === 'light' || (mode === 'auto' && !isNight);
-        document.body.classList.toggle('light-mode', isLight);
+        let isLight = false;
+        
+        document.body.classList.remove('light-mode', 'theme-pastel', 'theme-cyber', 'theme-royal');
+        
+        let activeColor = document.getElementById('setting-color-dark').value;
 
-        const customDark = document.getElementById('setting-color-dark').value;
-        const customLight = document.getElementById('setting-color-light').value;
-        const activeThemeColor = isLight ? customLight : customDark;
+        if (mode === 'light' || (mode === 'auto' && !isNight)) {
+            isLight = true; activeColor = document.getElementById('setting-color-light').value;
+        } else if (mode === 'pastel') {
+            document.body.classList.add('theme-pastel'); activeColor = '#ffb3ba';
+        } else if (mode === 'cyber') {
+            document.body.classList.add('theme-cyber'); activeColor = '#0ff';
+        } else if (mode === 'royal') {
+            document.body.classList.add('theme-royal'); activeColor = '#ffd700';
+        }
 
-        document.documentElement.style.setProperty('--sub', activeThemeColor);
-        document.documentElement.style.setProperty('--accent', activeThemeColor);
+        if(isLight) document.body.classList.add('light-mode');
+
+        document.documentElement.style.setProperty('--sub', activeColor);
+        document.documentElement.style.setProperty('--accent', activeColor);
         
         const title = document.getElementById('main-title');
-        title.style.color = activeThemeColor;
-        title.style.textShadow = !isLight ? `0 0 15px ${activeThemeColor}` : 'none';
-
-        const gachaBtn = document.getElementById('spin-button');
-        gachaBtn.style.background = activeThemeColor;
+        title.style.color = activeColor;
+        title.style.textShadow = (!isLight && mode !== 'pastel') ? `0 0 15px ${activeColor}` : 'none';
+        document.getElementById('spin-button').style.background = activeColor;
     }
 
-    function updateListDisplay() {
-        document.getElementById('task-list-display').innerHTML = tasks.map((t, i) => 
-            `<div class="task-item">
-                <div class="task-info">
-                    <input type="color" class="task-color-input" value="${t.color}" oninput="updateTaskColor(${i}, this.value)">
-                    <span style="font-weight: bold;">${t.name}</span>
-                </div>
-                <div style="display:flex; align-items:center; gap:10px;">
-                    <label style="font-size: 0.75rem; color: #888; display:flex; align-items:center; gap:3px;">
-                        <input type="checkbox" onchange="toggleTaskShare(${i}, this.checked)" ${t.shared ? 'checked' : ''}>共有
-                    </label>
-                    <span class="delete-btn" onclick="deleteTask(${i})">×</span>
-                </div>
-            </div>`
-        ).join('');
-        localStorage.setItem('myGachaTasks', JSON.stringify(tasks));
-    }
-
-    function updateTaskColor(i, color) { tasks[i].color = color; localStorage.setItem('myGachaTasks', JSON.stringify(tasks)); }
-    function toggleTaskShare(i, isShared) { tasks[i].shared = isShared; localStorage.setItem('myGachaTasks', JSON.stringify(tasks)); }
-    
-    function addTask() {
-        const val = document.getElementById('new-task').value.trim();
-        const col = document.getElementById('new-task-color').value;
-        if (val) { tasks.push({name: val, color: col, shared: false}); document.getElementById('new-task').value = ''; updateListDisplay(); }
-    }
-    
-    function deleteTask(i) { tasks.splice(i, 1); updateListDisplay(); }
-    
-    function resetDefault() { 
-        if(confirm("初期化しますか？")) { 
-            tasks = [
-                {name: "読書する", color: "#39ff14", shared: false}, {name: "歩く", color: "#39ff14", shared: false}, 
-                {name: "運動する", color: "#ff4444", shared: false}, {name: "勉強する", color: "#4444ff", shared: false}, 
-                {name: "仕事する", color: "#39ff14", shared: false}, {name: "ゲームする", color: "#39ff14", shared: false}, 
-                {name: "掃除する", color: "#39ff14", shared: false}
-            ]; updateListDisplay(); 
-        } 
-    }
-
-    // テンプレート機能
-    function updateTemplateDisplay() {
-        const html = Object.keys(templates).map(key => `
-            <div class="template-item">
-                <span style="font-weight:bold; cursor:pointer;" onclick="loadTemplate('${key}')">${key}</span>
-                <span class="delete-btn" style="font-size:0.8rem;" onclick="deleteTemplate('${key}')">削除</span>
-            </div>
-        `).join('');
-        document.getElementById('template-list-display').innerHTML = html || '<span style="color:#888;">保存されたテンプレートはありません</span>';
-    }
-
-    function saveTemplate() {
-        const name = document.getElementById('new-template-name').value.trim();
-        if (name && tasks.length > 0) {
-            templates[name] = JSON.parse(JSON.stringify(tasks));
-            localStorage.setItem('stTemplates', JSON.stringify(templates));
-            document.getElementById('new-template-name').value = '';
-            updateTemplateDisplay();
-        }
-    }
-
-    function loadTemplate(name) {
-        if(confirm(`テンプレート「${name}」を読み込みますか？現在のリストは上書きされます。`)) {
-            tasks = JSON.parse(JSON.stringify(templates[name]));
-            updateListDisplay();
-        }
-    }
-
-    function deleteTemplate(name) {
-        if(confirm(`テンプレート「${name}」を削除しますか？`)) {
-            delete templates[name];
-            localStorage.setItem('stTemplates', JSON.stringify(templates));
-            updateTemplateDisplay();
-        }
-    }
-
-    // ログイン機能
-    function saveLogin() {
-        const username = document.getElementById('login-username').value.trim();
-        if(username) {
-            localStorage.setItem('stUsername', username);
-            document.getElementById('current-user-display').innerText = `ログイン中: ${username}`;
-            alert('ログイン設定を保存しました。');
-            document.getElementById('login-modal').style.display = 'none';
-        }
-    }
-
+    /* --- タイマーと経験値処理 --- */
     function setPresetTime(sec, btn) {
         selectedSeconds = sec;
         let label = sec < 60 ? sec+"秒" : (sec < 3600 ? (sec/60)+"分" : (sec/3600)+"時間");
@@ -513,7 +523,7 @@
 
     function spin() {
         if (!tasks.length) return;
-        if (audioCtx.state === 'suspended') audioCtx.resume(); // 音声コンテキストの許可
+        if (audioCtx.state === 'suspended') audioCtx.resume();
         document.getElementById('timer-section').style.display = 'none';
         resetTimer(); isHistoryRecorded = false;
         let count = 0;
@@ -530,46 +540,11 @@
         }, 60);
     }
 
-    // Web Audio APIを用いた音声合成（秒針・アラーム）
-    function playTone(freq, duration, type = 'sine', mode = 'tick') {
-        try {
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-            
-            if (mode === 'tick' && !document.getElementById('tick-on').checked) return;
-            if (mode === 'alarm' && !document.getElementById('alarm-on').checked) return;
-            
-            const volStr = mode === 'tick' ? document.getElementById('tick-vol').value : document.getElementById('alarm-vol').value;
-            const maxVol = parseFloat(volStr) || 0.5;
-
-            const osc = audioCtx.createOscillator();
-            const gainNode = audioCtx.createGain();
-
-            osc.type = type;
-            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-
-            gainNode.gain.setValueAtTime(maxVol, audioCtx.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
-
-            osc.connect(gainNode);
-            gainNode.connect(audioCtx.destination);
-
-            osc.start();
-            osc.stop(audioCtx.currentTime + duration);
-        } catch(e) { console.log("Audio play error", e); }
-    }
-
-    // タスクの累計時間を保存する機能
-    function accumulateTaskTime(seconds) {
-        if (!currentTaskObj || currentTaskObj.name === "Ready?" || currentTaskObj.name === "休憩") return;
-        let stats = JSON.parse(localStorage.getItem('stTaskStats')) || {};
-        if (!stats[currentTaskObj.name]) stats[currentTaskObj.name] = 0;
-        stats[currentTaskObj.name] += seconds;
-        localStorage.setItem('stTaskStats', JSON.stringify(stats));
-    }
-
     function startTimer() {
         if (timerInterval || remainingTime <= 0) return;
-        if (audioCtx.state === 'suspended') audioCtx.resume(); // 音声コンテキストの許可
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        
+        checkConsecutiveDays(); // 開始時に日数を判定
 
         if (!isHistoryRecorded && currentTaskObj.name !== "Ready?" && currentTaskObj.name !== "休憩") {
             let h = JSON.parse(localStorage.getItem('arHistory')) || [];
@@ -578,20 +553,35 @@
             localStorage.setItem('arHistory', JSON.stringify(h.slice(0,30)));
             isHistoryRecorded = true;
         }
+        
         document.getElementById('btn-start').classList.add('active-ctrl');
         document.getElementById('btn-pause').classList.remove('active-ctrl');
+        
+        let buff = getBuffMultiplier();
+        
         timerInterval = setInterval(() => {
-            remainingTime--; 
+            remainingTime--;
+            
+            // 経験値を加算 (1秒あたり 1/60分 * 倍率)
+            if (currentTaskObj.name !== "Ready?" && currentTaskObj.name !== "休憩") {
+                sessionExp += (1 / 60) * buff;
+                updateExpVisuals(false);
+            }
+            
             updateTimerDisplay();
-            accumulateTaskTime(1); // 1秒ごとに累計時間を加算
             
             if (remainingTime > 0) playTone(880, 0.05, 'square', 'tick');
-            if (remainingTime <= 0) { clearInterval(timerInterval); triggerTimeUp(); }
+            if (remainingTime <= 0) { 
+                updateExpVisuals(true); // 終了時に保存
+                clearInterval(timerInterval); 
+                triggerTimeUp(); 
+            }
         }, 1000);
     }
     
     function pauseTimer() { 
-        clearInterval(timerInterval); timerInterval = null; 
+        if(timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+        updateExpVisuals(true); // ポーズ時にも経験値をセーブ
         document.getElementById('btn-pause').classList.add('active-ctrl');
         document.getElementById('btn-start').classList.remove('active-ctrl');
     }
@@ -617,73 +607,159 @@
     
     function stopAlarm() { if(alarmIntervalId) clearInterval(alarmIntervalId); document.getElementById('timeup-modal').style.display = 'none'; }
 
-    // 休憩機能
     function startBreakTime() {
         stopAlarm();
         currentTaskObj = { name: "休憩", color: "#00ff00", shared: false };
         document.documentElement.style.setProperty('--timer-color', currentTaskObj.color);
         document.getElementById('result-text').innerHTML = `<span style="font-size:1rem; opacity:0.6;">Break Time</span><br>☕ ${currentTaskObj.name} ☕`;
-        setPresetTime(300, null); // 5分
-        startTimer();
+        setPresetTime(300, null); startTimer();
     }
 
-    // SNSシェア機能
-    function shareOnSNS() {
-        const minutes = Math.floor(selectedSeconds / 60);
-        let text = `Studying Timerで「${currentTaskObj.name}」を${minutes}分達成しました！`;
-        if(currentTaskObj.name === "休憩") text = `Studying Timerで作業を終えて休憩に入ります！`;
-        const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&hashtags=StudyingTimer`;
-        window.open(url, '_blank');
+    /* --- リスト・データ管理系関数 (変更なし) --- */
+    function updateListDisplay() {
+        document.getElementById('task-list-display').innerHTML = tasks.map((t, i) => 
+            `<div class="task-item">
+                <div class="task-info">
+                    <input type="color" class="task-color-input" value="${t.color}" oninput="updateTaskColor(${i}, this.value)">
+                    <span style="font-weight: bold;">${t.name}</span>
+                </div>
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <span class="delete-btn" onclick="deleteTask(${i})">×</span>
+                </div>
+            </div>`
+        ).join('');
+        localStorage.setItem('myGachaTasks', JSON.stringify(tasks));
     }
-
+    function updateTaskColor(i, color) { tasks[i].color = color; localStorage.setItem('myGachaTasks', JSON.stringify(tasks)); }
+    function addTask() { const val = document.getElementById('new-task').value.trim(); const col = document.getElementById('new-task-color').value; if (val) { tasks.push({name: val, color: col, shared: false}); document.getElementById('new-task').value = ''; updateListDisplay(); } }
+    function deleteTask(i) { tasks.splice(i, 1); updateListDisplay(); }
+    function resetDefault() { if(confirm("初期化しますか？")) { tasks = [ {name: "読書する", color: "#39ff14"}, {name: "歩く", color: "#39ff14"}, {name: "運動する", color: "#ff4444"}, {name: "勉強する", color: "#4444ff"}, {name: "仕事する", color: "#39ff14"}, {name: "ゲームする", color: "#39ff14"}, {name: "掃除する", color: "#39ff14"} ]; updateListDisplay(); } }
+    
+    function updateTemplateDisplay() {
+        const html = Object.keys(templates).map(key => `<div class="template-item"><span style="font-weight:bold; cursor:pointer;" onclick="loadTemplate('${key}')">${key}</span><span class="delete-btn" style="font-size:0.8rem;" onclick="deleteTemplate('${key}')">削除</span></div>`).join('');
+        document.getElementById('template-list-display').innerHTML = html || '<span style="color:#888;">保存されたテンプレートはありません</span>';
+    }
+    function saveTemplate() { const name = document.getElementById('new-template-name').value.trim(); if (name && tasks.length > 0) { templates[name] = JSON.parse(JSON.stringify(tasks)); localStorage.setItem('stTemplates', JSON.stringify(templates)); document.getElementById('new-template-name').value = ''; updateTemplateDisplay(); } }
+    function loadTemplate(name) { if(confirm(`テンプレート「${name}」を読み込みますか？`)) { tasks = JSON.parse(JSON.stringify(templates[name])); updateListDisplay(); } }
+    function deleteTemplate(name) { if(confirm(`テンプレート「${name}」を削除しますか？`)) { delete templates[name]; localStorage.setItem('stTemplates', JSON.stringify(templates)); updateTemplateDisplay(); } }
+    function saveLogin() { const username = document.getElementById('login-username').value.trim(); if(username) { localStorage.setItem('stUsername', username); document.getElementById('current-user-display').innerText = `ログイン中: ${username}`; alert('設定しました'); document.getElementById('login-modal').style.display = 'none'; } }
+    
     function renderHistory() {
         const h = JSON.parse(localStorage.getItem('arHistory')) || [];
         document.getElementById('history-list-display').innerHTML = h.map((x, i) => `
             <div class="history-item" onclick="applyHistory('${(x.task||"").replace(/'/g,"\\'")}', ${x.sec}, '${x.color || "#39ff14"}')">
-                <div class="history-main">
-                    <span class="history-task" style="border-left: 3px solid ${x.color}; padding-left: 8px;">${x.task}</span>
-                    <span style="font-size:0.75rem; opacity:0.6; margin-left: 11px;">${x.label} (${x.date.split(' ')[0]})</span>
-                </div>
+                <div class="history-main"><span class="history-task" style="border-left: 3px solid ${x.color}; padding-left: 8px;">${x.task}</span><span style="font-size:0.75rem; opacity:0.6; margin-left: 11px;">${x.label} (${x.date.split(' ')[0]})</span></div>
                 <div class="delete-history" onclick="deleteHistory(event, ${i})">×</div>
             </div>`).join('') || "履歴はありません";
     }
-    
     function deleteHistory(e, i) { e.stopPropagation(); let h = JSON.parse(localStorage.getItem('arHistory')); h.splice(i, 1); localStorage.setItem('arHistory', JSON.stringify(h)); renderHistory(); }
-    
-    function applyHistory(task, sec, color) {
-        document.getElementById('settings-modal').style.display = 'none';
-        currentTaskObj = { name: task, color: color, shared: false };
-        selectedSeconds = sec; remainingTime = sec; isHistoryRecorded = true;
-        document.documentElement.style.setProperty('--timer-color', color);
-        document.getElementById('result-text').innerHTML = `<span style="font-size:0.8rem; opacity:0.6;">履歴から復元</span><br>⭐ ${currentTaskObj.name} ⭐`;
-        let label = sec < 60 ? sec+"秒" : (sec < 3600 ? (sec/60)+"分" : (sec/3600)+"時間");
-        document.getElementById('selected-time-display').innerText = `設定時間: ${label}`;
-        updateTimerDisplay(); document.getElementById('timer-section').style.display = 'block';
+    function applyHistory(task, sec, color) { document.getElementById('settings-modal').style.display = 'none'; currentTaskObj = { name: task, color: color, shared: false }; selectedSeconds = sec; remainingTime = sec; isHistoryRecorded = true; document.documentElement.style.setProperty('--timer-color', color); document.getElementById('result-text').innerHTML = `<span style="font-size:0.8rem; opacity:0.6;">履歴から復元</span><br>⭐ ${currentTaskObj.name} ⭐`; let label = sec < 60 ? sec+"秒" : (sec < 3600 ? (sec/60)+"分" : (sec/3600)+"時間"); document.getElementById('selected-time-display').innerText = `設定時間: ${label}`; updateTimerDisplay(); document.getElementById('timer-section').style.display = 'block'; }
+
+    // ステータス画面の生成
+    function renderStatusModal() {
+        let totalExp = parseFloat(localStorage.getItem('stTotalExp')) || 0;
+        let data = getLevelData(totalExp);
+        let buff = getBuffMultiplier();
+        let days = parseInt(localStorage.getItem('stConsecutiveDays')) || 0;
+        if(days===0) days = 1;
+
+        document.getElementById('status-level').innerText = data.level;
+        document.getElementById('status-buff-display').innerText = "x" + buff.toFixed(2);
+        document.getElementById('status-days').innerText = days + "日";
+        document.getElementById('status-skip').innerText = (Math.max(0, data.level - 1)) + "枚";
+        
+        let h = Math.floor(totalExp / 60);
+        let m = Math.floor(totalExp % 60);
+        document.getElementById('status-total-time').innerText = `${h}時間${m}分`;
+        
+        let title = "努力の卵";
+        let crownIcon = "👑", crownClass = "";
+
+        if (data.level >= 100) { title = "時を統べる神"; crownIcon = "👑✨"; crownClass = "crown-god"; }
+        else if (data.level >= 90) { title = "伝説の集中力"; crownClass = "crown-gold"; }
+        else if (data.level >= 60) { title = "時間の支配者"; crownClass = "crown-silver"; }
+        else if (data.level >= 30) { title = "継続の達人"; crownClass = "crown-bronze"; }
+        else if (data.level >= 10) { title = "習慣化の始まり"; crownIcon = "🏆"; }
+        else { crownIcon = "🏆"; }
+
+        document.getElementById('status-title').innerText = title;
+        let sc = document.getElementById('status-crown');
+        sc.innerText = crownIcon; sc.className = crownClass;
+
+        let p = "";
+        if (data.level >= 10) p += "<li>[Lv.10] ゲージ発光 / パステルテーマ解放</li>";
+        if (data.level >= 20) p += "<li>[Lv.20] タイマー・グロー効果</li>";
+        if (data.level >= 30) p += "<li>[Lv.30] 王冠進化: ブロンズ・リーフ</li>";
+        if (data.level >= 40) p += "<li>[Lv.40] サイバーテーマ解放</li>";
+        if (data.level >= 50) p += "<li>[Lv.50] 画面パーティクル効果</li>";
+        if (data.level >= 60) p += "<li>[Lv.60] 王冠進化: シルバー・オーラ</li>";
+        if (data.level >= 70) p += "<li>[Lv.70] ロイヤルテーマ解放</li>";
+        if (data.level >= 80) p += "<li>[Lv.80] 星空オーラ背景</li>";
+        if (data.level >= 90) p += "<li>[Lv.90] クリスタル・フォント / ジュエル王冠</li>";
+        if (data.level >= 100) p += "<li>[Lv.100] ゴッド・モード / テーマ完全解放</li>";
+        if (!p) p = "<li>まだ特典はありません。レベルを上げましょう！</li>";
+        document.getElementById('status-perks').innerHTML = p;
     }
 
-    function renderRankingMock() {
-        let stats = JSON.parse(localStorage.getItem('stTaskStats')) || {};
-        let html = Object.keys(stats).map(task => {
-            let h = Math.floor(stats[task] / 3600);
-            let m = Math.floor((stats[task] % 3600) / 60);
-            return `<div style="display:flex; justify-content:space-between; padding: 4px 0; border-bottom: 1px solid var(--border);">
-                <span style="font-weight:bold;">${task}</span><span>${h}時間${m}分</span>
-            </div>`;
-        }).join('');
-        if(!html) html = '<div style="color:#888; text-align:center;">まだ学習記録がありません</div>';
-        
-        document.getElementById('friends-time-list').innerHTML = 
-            `<div style="font-size:0.75rem; color:#888; margin-bottom:10px;">※現在はご自身のローカル累計時間を表示しています</div>` + html;
+    function shareOnSNS() {
+        const min = Math.floor(selectedSeconds / 60);
+        let text = `Studying Timerで「${currentTaskObj.name}」を${min}分達成しました！(現在のLv.${document.getElementById('main-lv').innerText})`;
+        window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&hashtags=StudyingTimer`, '_blank');
+    }
+
+    function playTone(freq, dur, type='sine', mode='tick') {
+        try {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            if (mode === 'tick' && !document.getElementById('tick-on').checked) return;
+            if (mode === 'alarm' && !document.getElementById('alarm-on').checked) return;
+            const maxVol = parseFloat(mode === 'tick' ? document.getElementById('tick-vol').value : document.getElementById('alarm-vol').value) || 0.5;
+            const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+            osc.type = type; osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            gain.gain.setValueAtTime(maxVol, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
+            osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + dur);
+        } catch(e) {}
     }
 
     function openModal(id) { 
         document.getElementById(id).style.display = 'flex'; 
         if(id==='settings-modal') renderHistory(); 
-        if(id==='ranking-modal') renderRankingMock();
+        if(id==='status-modal') renderStatusModal();
     }
     function closeModal(e, id) { if(e.target.id === id) document.getElementById(id).style.display = 'none'; }
 
-    loadSettings(); updateListDisplay(); updateTemplateDisplay();
+    // 初期化処理
+    loadSettings(); 
+    updateListDisplay(); 
+    updateTemplateDisplay();
+    checkConsecutiveDays();
+    updateExpVisuals(false);
+
+    /* --- 開発者用 デバッグコマンド --- */
+    window.dev = {
+        setLevel: function(targetLvl) {
+            let exp = 0;
+            for(let i = 1; i < targetLvl; i++) {
+                let req = Math.round(47.52 * i);
+                if (i === 100) req = 4776;
+                if (i > 100) req = Math.round(47.52 * i);
+                exp += req;
+            }
+            localStorage.setItem('stTotalExp', exp);
+            updateExpVisuals(true);
+            console.log(`[DEV] Level is forced to ${targetLvl}. Cumulative Time: ${Math.floor(exp)} mins`);
+        },
+        setDays: function(days) {
+            localStorage.setItem('stConsecutiveDays', days);
+            updateExpVisuals(false);
+            console.log(`[DEV] Consecutive Days set to ${days}`);
+        },
+        reset: function() {
+            localStorage.removeItem('stTotalExp');
+            localStorage.removeItem('stConsecutiveDays');
+            localStorage.removeItem('stLastRunDate');
+            location.reload();
+        }
+    };
 </script>
 </body>
 </html>
