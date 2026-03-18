@@ -288,7 +288,7 @@
         <h3 style="font-size:1rem; color:var(--sub);">✨ 解禁された特典</h3>
         <div id="crown-picker" style="display:grid; grid-template-columns:repeat(5,1fr); gap:10px; margin:15px 0;"></div>
         <p style="margin:5px 0; font-size:0.9rem;">回復券: <strong id="status-tickets" style="color:var(--sub);">0</strong>枚</p>
-        <button id="recovery-btn" onclick="useRecoveryTicket()" style="display:none; width:100%; padding:10px; margin-top:10px; background:var(--accent); color:white; border:none; border-radius:10px; font-weight:bold; cursor:pointer;">回復券で昨日の継続を復活！</button>
+        <button id="recovery-btn" onclick="useRecoveryTicket()" style="display:none; width:100%; padding:10px; margin-top:10px; background:var(--accent); color:white; border:none; border-radius:10px; font-weight:bold; cursor:pointer;">昨日分を回復券で補填する</button>
 
         <button onclick="document.getElementById('status-modal').style.display='none'" style="width:100%; padding:12px; margin-top:20px; cursor:pointer; background:var(--border); border:none; color:var(--text); border-radius:8px; font-weight:bold;">閉じる</button>
     </div>
@@ -679,6 +679,19 @@
         if(document.getElementById('status-tickets')) {
             document.getElementById('status-tickets').innerText = ticketCount;
         }
+        // 1. 回復ボタンの表示制御を追加
+        const recoveryBtn = document.getElementById('recovery-btn');
+        if (recoveryBtn) {
+            const hasLostStreak = localStorage.getItem('stLostStreak');
+            const hasTickets = parseInt(localStorage.getItem('stRecoveryTickets')) > 0;
+            // 「昨日分を忘れた記録」があり、かつ「回復券」を持っている時だけボタンを出す
+            recoveryBtn.style.display = (hasLostStreak && hasTickets) ? 'block' : 'none';
+        }
+
+        // 2. 王冠選択グリッドの描画を呼び出す
+        if (typeof renderCrownPicker === 'function') {
+            renderCrownPicker(data.level);
+        }
         
         // 累計時間の表示（時間と分）
         let h = Math.floor(totalExp / 60);
@@ -743,6 +756,32 @@
     checkConsecutiveDays();
     updateExpVisuals(false);
 
+function useRecoveryTicket() {
+        let tickets = parseInt(localStorage.getItem('stRecoveryTickets')) || 0;
+        let lostStreak = parseInt(localStorage.getItem('stLostStreak'));
+        if (tickets > 0 && lostStreak) {
+            localStorage.setItem('stConsecutiveDays', lostStreak + 2); // B日分も加算
+            localStorage.setItem('stRecoveryTickets', tickets - 1);
+            localStorage.removeItem('stLostStreak');
+            alert("回復券を使用しました！継続日数を復元しました。");
+            location.reload();
+        }
+    }
+
+    function renderCrownPicker(level) {
+        const picker = document.getElementById('crown-picker');
+        if(!picker) return;
+        let selected = localStorage.getItem('stSelectedCrown') || 0;
+        picker.innerHTML = "";
+        for(let i=0; i<10; i++) {
+            let isUnlocked = level >= (i * 10);
+            let img = document.createElement('img');
+            img.src = `crown_${i}.png`; // crown_0.png から crown_9.png まで
+            img.style = `width:100%; cursor:${isUnlocked ? 'pointer' : 'not-allowed'}; opacity:${isUnlocked ? 1 : 0.2}; border:${selected == i ? '2px solid var(--sub)' : 'none'}; border-radius:5px;`;
+            img.onclick = () => { if(isUnlocked) { localStorage.setItem('stSelectedCrown', i); location.reload(); }};
+            picker.appendChild(img);
+        }
+    }
     /* --- 開発者用 デバッグコマンド --- */
     window.dev = {
         setLevel: function(targetLvl) {
@@ -769,32 +808,7 @@
             location.reload();
         }
     };
-    function useRecoveryTicket() {
-        let tickets = parseInt(localStorage.getItem('stRecoveryTickets')) || 0;
-        let lostStreak = parseInt(localStorage.getItem('stLostStreak'));
-        if (tickets > 0 && lostStreak) {
-            localStorage.setItem('stConsecutiveDays', lostStreak + 2); // B日分も加算
-            localStorage.setItem('stRecoveryTickets', tickets - 1);
-            localStorage.removeItem('stLostStreak');
-            alert("回復券を使用しました！継続日数を復元しました。");
-            location.reload();
-        }
-    }
-
-    function renderCrownPicker(level) {
-        const picker = document.getElementById('crown-picker');
-        if(!picker) return;
-        let selected = localStorage.getItem('stSelectedCrown') || 0;
-        picker.innerHTML = "";
-        for(let i=0; i<10; i++) {
-            let isUnlocked = level >= (i * 10);
-            let img = document.createElement('img');
-            img.src = `crown_${i}.png`; // crown_0.png から crown_9.png まで
-            img.style = `width:100%; cursor:${isUnlocked ? 'pointer' : 'not-allowed'}; opacity:${isUnlocked ? 1 : 0.2}; border:${selected == i ? '2px solid var(--sub)' : 'none'}; border-radius:5px;`;
-            img.onclick = () => { if(isUnlocked) { localStorage.setItem('stSelectedCrown', i); location.reload(); }};
-            picker.appendChild(img);
-        }
-    }
+    
 </script>
 </body>
 </html>
