@@ -740,7 +740,28 @@
             gain.gain.setValueAtTime(maxVol, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
             osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + dur);
         } catch(e) {}
+            // 1. 回復券の枚数を画面に反映
+        const tCount = localStorage.getItem('stRecoveryTickets') || 0;
+        if(document.getElementById('status-tickets')) {
+            document.getElementById('status-tickets').innerText = tCount;
+        }
+
+        // 2. 回復ボタンの表示・非表示を切り替え
+        const rBtn = document.getElementById('recovery-btn');
+        if (rBtn) {
+            const hasLost = localStorage.getItem('stLostStreak');
+            const hasTix = parseInt(tCount) > 0;
+            // 昨日の未完了記録があり、かつ券がある時だけ表示
+            rBtn.style.display = (hasLost && hasTix) ? 'block' : 'none';
+        }
+
+        // 3. 王冠の選択肢を表示する
+        if (typeof renderCrownPicker === 'function') {
+            renderCrownPicker(data.level);
+        }
+
     }
+    
 
     function openModal(id) { 
         document.getElementById(id).style.display = 'flex'; 
