@@ -247,7 +247,8 @@
 }
    
     
-    /* ✨エフェクト */
+    /* ✨メイン王冠エフェクト */
+#main-crown img {
     filter: drop-shadow(0 0 6px gold);
     transition: transform 0.3s;
 }
@@ -671,7 +672,15 @@ function getLevelData(exp) {
         let level = data.level;
 
 // 🔥 ここ修正
-crowns.owned = [];
+let newOwned = [];
+
+for (let i = 0; i < crownImages.length; i++) {
+    if (level >= (i + 1) * 10) {
+        newOwned.push(i);
+    }
+}
+
+crowns.owned = newOwned;
 
 for (let i = 0; i < crownImages.length; i++) {
     if (level >= (i + 1) * 10) {
@@ -1001,25 +1010,20 @@ function loadTemplate(name) {
                 <div class="delete-history" onclick="deleteHistory(event, ${i})">×</div>
             </div>`).join('') || "履歴はありません";
     }
-    function renderRanking() {
-  const list = document.getElementById("rankingList");
+   function renderRanking() {
+   const list = document.getElementById("ranking-list");
 
-  // ▼ ここでデータ取得
-  let data = JSON.parse(localStorage.getItem("ranking") || "[]");
+    let data = JSON.parse(localStorage.getItem("stRanking")) || [];
 
-  // 🔧 表示時にフィルター（←ここ！！！）
-  data = data.filter(item => item.name && item.time);
+    // expでソート
+    data.sort((a, b) => b.exp - a.exp);
 
-  // ▼ ソート
-  data.sort((a, b) => b.time - a.time);
-
-  // ▼ 表示
-  list.innerHTML = "";
-  data.forEach((item, i) => {
-    list.innerHTML += `
-      <li>${i + 1}位：${item.name} - ${item.time}分</li>
-    `;
-  });
+    list.innerHTML = data.map((item, i) => `
+    <div style="padding:5px; border-bottom:1px solid #333;">
+        🏆 ${i + 1}位：${item.name}<br>
+        <span style="color:var(--sub);">${Math.floor(item.exp)}分</span>
+    </div>
+`).join('');
 }
     function deleteHistory(e, i) { e.stopPropagation(); let h = JSON.parse(localStorage.getItem('arHistory')); h.splice(i, 1); localStorage.setItem('arHistory', JSON.stringify(h)); renderHistory(); }
     function applyHistory(task, sec, color) { document.getElementById('settings-modal').style.display = 'none'; currentTaskObj = { name: task, color: color, shared: false }; selectedSeconds = sec; remainingTime = sec; isHistoryRecorded = true; document.documentElement.style.setProperty('--timer-color', color); document.getElementById('result-text').innerHTML = `<span style="font-size:0.8rem; opacity:0.6;">履歴から復元</span><br>⭐ ${currentTaskObj.name} ⭐`; let label = sec < 60 ? sec+"秒" : (sec < 3600 ? (sec/60)+"分" : (sec/3600)+"時間"); document.getElementById('selected-time-display').innerText = `設定時間: ${label}`; updateTimerDisplay(); document.getElementById('timer-section').style.display = 'block'; }
@@ -1045,9 +1049,10 @@ function loadTemplate(name) {
     window.selectCrown = function(i) {
     crowns.selected = i;
     localStorage.setItem('stCrowns', JSON.stringify(crowns));
-    location.reload();
-        
-}
+
+    updateCrownDisplay();     // ←追加
+    updateStatusCrown();      // ←追加
+};
         
         let h = Math.floor(totalExp / 60);
         let m = Math.floor(totalExp % 60);
@@ -1120,14 +1125,14 @@ if (savedIcon) {
     function setHeaderImage(file) {
     const reader = new FileReader();
     reader.onload = function(e) {
-        localStorage.setItem('stHeaderImage', e.target.result);
-        renderHeaderImage();
+        localStorage.setItem('userIcon', e.target.result);
+        renderUserIcon();
     };
     reader.readAsDataURL(file);
 }
 
 function renderUserIcon() {
-    const imgData = localStorage.getItem('stHeaderImage');
+    const imgData = localStorage.getItem('userIcon');
     const img = document.getElementById('user-icon');
     const def = document.getElementById('default-user-icon');
 
