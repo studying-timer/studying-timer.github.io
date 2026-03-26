@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>大学受験国語：現代文・古文・漢文の三位一体攻略</title>
+
+<style>
+    :root {
+        --bg: #050505; --sub: #00f2ff; --text: #ffffff;
+        --card: #1a1a1a; --border: #333333;
+        --bg-pattern: linear-gradient(45deg, #0a0a0a 25%, transparent 25%, transparent 75%, #0a0a0a 75%, #0a0a0a),
+                      linear-gradient(45deg, #0a0a0a 25%, transparent 25%, transparent 75%, #0a0a0a 75%, #0a0a0a);
+        --bg-size: 20px 20px; --bg-pos: 0 0, 10px 10px;
+    }
+
+    body.light-mode {
+        --bg: #ecece7; --card: #f9f9f7; --text: #2c3e50; --border: #d1d1cf; --bg-pattern: none;
+    }
+
+    body {
+        font-family: 'Helvetica Neue', Arial, sans-serif;
+        background-color: var(--bg); color: var(--text);
+        background-image: var(--bg-pattern);
+        background-size: var(--bg-size);
+        background-position: var(--bg-pos);
+        margin: 0; display: flex; justify-content: center;
+        min-height: 100vh; padding: 20px; box-sizing: border-box;
+    }
+
+    .container { width: 100%; max-width: 500px; }
+
+    .content-box {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 15px;
+        padding: 25px;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+        color: var(--sub);
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 10px;
+    }
+
+    p { line-height: 1.8; margin: 12px 0; }
+
+    .back-btn {
+        display: inline-block;
+        background: var(--sub);
+        color: #fff;
+        text-decoration: none;
+        padding: 12px 20px;
+        border-radius: 8px;
+        font-weight: bold;
+        margin-top: 20px;
+        width: calc(100% - 40px);
+        text-align: center;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <div class="content-box">
+
+        <h1>大学受験国語：現代文・古文・漢文の三位一体攻略</h1>
+
+        <p>国語は「日本語だから勉強しなくてもなんとかなる」あるいは「センスがすべてだ」と誤解されがちな科目ですが、大学入試における国語は、極めて緻密な「論理的思考のパズル」です。現代文、古文、漢文の三分野それぞれに特有の攻略法があり、それらをバランスよく習得することで、模試や本番での安定した得点力を築くことができます。</p>
+        <p>まず「現代文」で求められるのは、自分の主観や好みを一切排除し、筆者の主張のみを本文の記述から「客観的」に抽出する力です。特に入試頻出の評論文においては、対比構造（例えば「西洋と日本」「個人と社会」「デジタルと言語」など）を見抜くことが肝要です。筆者が何と何を戦わせているのか、その構図を掴めれば、文章の半分は読めたも同然です。接続詞（しかし、つまり、なぜなら）を道標に、文章の骨組みを可視化してください。選択肢を選ぶ際は、「なんとなく」ではなく「本文の第○段落の記述と矛盾するから×」というように、消去の根拠を明確にする訓練を積みましょう。この客観性こそが、現代文の唯一の正攻法です。</p>
+        <p>「古文」は、英語と同じ「外国語学習」として捉えるのが最も効率的です。まずは主要な古文単語（300〜600語）と、助動詞の接続・意味、そして敬語の知識を徹底的に叩き込みます。古文が読めない最大の要因は「主語の省略」です。敬語（尊敬・謙譲・丁寧）の使われ方を確認し、「誰から誰への敬意か」を特定することで、省略された主語をパズルのように埋めていく技術を磨いてください。また、当時の貴族の生活習慣や宗教観（古文常識）を知っておくと、物語の展開を予測しやすくなり、読解が格段にスムーズになります。</p>
+        <p>「漢文」は、最も短期間で満点が狙える、国語の中で最高の得点源です。再読文字、使役、受身、反語といった基本句法を数十個完璧にし、書き下し文をスラスラと作れるように練習しましょう。漢文はパターンが決まっており、句法という「型」に当てはめて読む訓練さえ積めば、誰でも確実に高得点が取れます。国語全体の学習において大切なのは、現代文で培った「論理的読解」を古文・漢文にも応用し、全方位から言語能力を底上げすることです。本文に書かれていないことは答えない、という鉄則を常に胸に刻んで、解答の精度を高めていきましょう。</p>
+
+        <a href="index.html" class="back-btn">ツールへ戻る</a>
+
+    </div>
+</div>
+
+<script>
+const saved = JSON.parse(localStorage.getItem('arSettings')) || {};
+const mode = saved.theme || 'auto';
+const isNight = new Date().getHours() >= 21 || new Date().getHours() < 7;
+const isLight = mode === 'light' || (mode === 'auto' && !isNight);
+
+if(isLight) document.body.classList.add('light-mode');
+
+const customDark = saved.colorDark || '#00f2ff';
+const customLight = saved.colorLight || '#0077cc';
+const activeThemeColor = isLight ? customLight : customDark;
+
+document.documentElement.style.setProperty('--sub', activeThemeColor);
+</script>
+
+</body>
+</html>
