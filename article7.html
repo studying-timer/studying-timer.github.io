@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>英語学習の本質：音読がもたらす「英語脳」の形成</title>
+
+<style>
+    :root {
+        --bg: #050505; --sub: #00f2ff; --text: #ffffff;
+        --card: #1a1a1a; --border: #333333;
+        --bg-pattern: linear-gradient(45deg, #0a0a0a 25%, transparent 25%, transparent 75%, #0a0a0a 75%, #0a0a0a),
+                      linear-gradient(45deg, #0a0a0a 25%, transparent 25%, transparent 75%, #0a0a0a 75%, #0a0a0a);
+        --bg-size: 20px 20px; --bg-pos: 0 0, 10px 10px;
+    }
+
+    body.light-mode {
+        --bg: #ecece7; --card: #f9f9f7; --text: #2c3e50; --border: #d1d1cf; --bg-pattern: none;
+    }
+
+    body {
+        font-family: 'Helvetica Neue', Arial, sans-serif;
+        background-color: var(--bg); color: var(--text);
+        background-image: var(--bg-pattern);
+        background-size: var(--bg-size);
+        background-position: var(--bg-pos);
+        margin: 0; display: flex; justify-content: center;
+        min-height: 100vh; padding: 20px; box-sizing: border-box;
+    }
+
+    .container { width: 100%; max-width: 500px; }
+
+    .content-box {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 15px;
+        padding: 25px;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+        color: var(--sub);
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 10px;
+    }
+
+    p { line-height: 1.8; margin: 12px 0; }
+
+    .back-btn {
+        display: inline-block;
+        background: var(--sub);
+        color: #fff;
+        text-decoration: none;
+        padding: 12px 20px;
+        border-radius: 8px;
+        font-weight: bold;
+        margin-top: 20px;
+        width: calc(100% - 40px);
+        text-align: center;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <div class="content-box">
+
+        <h1>英語学習の本質：音読がもたらす「英語脳」の形成</h1>
+
+        <p>英語を単なる受験用の「科目」として暗記するのではなく、一生使える「スキル」として身につけるために、最も重要で、かつ多くの受験生が軽視しがちなトレーニングが「音読」です。日本の英語教育では長年、英文を一文ずつ和訳して理解する「訳読」が重視されてきましたが、共通テストに代表されるスピード重視の入試に対応するためには、それでは不十分です。英語を英語の語順のまま、左から右へと瞬時に理解する「英語脳」を作るためには、視覚、聴覚、発声という五感をフルに活用した音読トレーニングが欠かせません。</p>
+        <p>音読がもたらす効果は驚くほど多岐にわたります。まず、視覚だけで追う黙読と違い、自分の声を耳で聞くことで「リスニング力」が飛躍的に向上します。「自分で正しく発音できる音は、必ず正確に聞き取れる」というのは言語習得における普遍的な法則です。また、声を出すという物理的な運動を伴うことで、複雑な英文法や構文が、理屈ではなく身体のリズムとして刻み込まれます。これを数百回と繰り返すと、英作文の際に「この前置詞はなんとなく座りが悪い」といった、ネイティブスピーカーに近い言語感覚が芽生えてきます。知識として知っているだけの英語が、使いこなせる自分の血肉へと変化する瞬間です。</p>
+        <p>具体的な練習法としては、ただ棒読みするのではなく「オーバーラッピング」や「シャドーイング」を強くお勧めします。お手本となるネイティブの音声に自分の声を重ね、イントネーション、強弱、音の消失（リエゾン）を完璧にコピーするのです。同じ英文を最低でも30回、できれば50回は繰り返してみてください。最初は意味を追うだけで精一杯かもしれませんが、回数を重ねるごとに文の構造が立体的に見え始め、最終的には無意識に口からフレーズが溢れ出すようになります。この「自動化」の状態こそが、英語を道具として使いこなせている状態であり、読解スピードの劇的な向上に繋がります。</p>
+        <p>多くの受験生が英語学習で挫折する原因は、単語帳と睨めっこする時間の単調さにあります。言葉は本来、コミュニケーションのための「音」であり「エネルギー」です。毎日15分、自分の好きな長文問題集の英文を一節、心を込めて音読してみてください。数ヶ月後、模試の長文が驚くほどスラスラと「日本語を介さず」に頭に入ってくる自分に気づくはずです。英語学習の主戦場は机の上だけでなく、あなたの「口」と「耳」にあるのです。今日から音読を習慣にし、英語という広大な世界へ漕ぎ出す力を養いましょう。</p>
+
+        <a href="index.html" class="back-btn">ツールへ戻る</a>
+
+    </div>
+</div>
+
+<script>
+const saved = JSON.parse(localStorage.getItem('arSettings')) || {};
+const mode = saved.theme || 'auto';
+const isNight = new Date().getHours() >= 21 || new Date().getHours() < 7;
+const isLight = mode === 'light' || (mode === 'auto' && !isNight);
+
+if(isLight) document.body.classList.add('light-mode');
+
+const customDark = saved.colorDark || '#00f2ff';
+const customLight = saved.colorLight || '#0077cc';
+const activeThemeColor = isLight ? customLight : customDark;
+
+document.documentElement.style.setProperty('--sub', activeThemeColor);
+</script>
+
+</body>
+</html>
