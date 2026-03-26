@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>成長マインドセット：失敗を「脳の成長痛」と捉える思考法</title>
+
+<style>
+    :root {
+        --bg: #050505; --sub: #00f2ff; --text: #ffffff;
+        --card: #1a1a1a; --border: #333333;
+        --bg-pattern: linear-gradient(45deg, #0a0a0a 25%, transparent 25%, transparent 75%, #0a0a0a 75%, #0a0a0a),
+                      linear-gradient(45deg, #0a0a0a 25%, transparent 25%, transparent 75%, #0a0a0a 75%, #0a0a0a);
+        --bg-size: 20px 20px; --bg-pos: 0 0, 10px 10px;
+    }
+
+    body.light-mode {
+        --bg: #ecece7; --card: #f9f9f7; --text: #2c3e50; --border: #d1d1cf; --bg-pattern: none;
+    }
+
+    body {
+        font-family: 'Helvetica Neue', Arial, sans-serif;
+        background-color: var(--bg); color: var(--text);
+        background-image: var(--bg-pattern);
+        background-size: var(--bg-size);
+        background-position: var(--bg-pos);
+        margin: 0; display: flex; justify-content: center;
+        min-height: 100vh; padding: 20px; box-sizing: border-box;
+    }
+
+    .container { width: 100%; max-width: 500px; }
+
+    .content-box {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 15px;
+        padding: 25px;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+        color: var(--sub);
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 10px;
+    }
+
+    p { line-height: 1.8; margin: 12px 0; }
+
+    .back-btn {
+        display: inline-block;
+        background: var(--sub);
+        color: #fff;
+        text-decoration: none;
+        padding: 12px 20px;
+        border-radius: 8px;
+        font-weight: bold;
+        margin-top: 20px;
+        width: calc(100% - 40px);
+        text-align: center;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <div class="content-box">
+
+        <h1>成長マインドセット：失敗を「脳の成長痛」と捉える思考法</h1>
+
+        <p>受験勉強や日々の学習において、最も恐ろしい敵は何でしょうか。それは難しい入試問題でも、ライバルの存在でもありません。それは「自分には才能がない」「頑張ってもどうせ無理だ」という自己否定の思い込み、すなわち心のブレーキです。心理学者のキャロル・ドゥエックは、人間の能力は経験や努力、適切な戦略によっていくらでも伸ばせると信じる姿勢を「しなやかマインドセット（グロース・マインドセット）」と呼び、これが成功を収めるための決定的な要因であることを明らかにしました。逆に、能力は生まれつき固定されており変わらないと考える「硬直マインドセット」は、挑戦を避け、失敗を自分の価値の否定と捉えてしまいます。</p>
+        <p>勉強が難しくなり、いくら解いても理解できない壁にぶつかったとき、それはあなたが「才能の限界」に達したサインではありません。むしろ、あなたの脳が最も激しく変化し、新しい神経回路を構築しようとしている「成長痛」のサインなのです。最新の神経科学によれば、私たちの脳には「可塑性」という性質があり、未知の課題に挑み、試行錯誤を繰り返すことで、ニューロン同士の結びつきが劇的に強化されます。つまり、「分からない」という不快な状態こそが、脳のアップデートが進行している証拠なのです。苦しいときこそ、「今、自分の脳が凄まじいスピードで進化している最中だ」とポジティブに解釈し直してください。</p>
+        <p>模試の結果も同様です。判定がEだったり、点数が前回より下がったりしたとき、それはあなたの全人格や将来の可能性を否定する審判ではありません。それは単に「現時点での課題」を可視化した「一時的なデータ」に過ぎません。大切なのは、その失敗をどう活用するかです。間違えた問題を放置せず、「なぜ計算ミスをしたのか」「どの知識が抜けていたのか」を執拗に分析し、次に同じ状況になったときの対策を立てる。この「失敗のデータ化」こそが、一流の学習者へと成長するための唯一の道です。成功者は、誰よりも多くの失敗を積み重ね、そこから学びを得る達人でもあります。</p>
+        <p>自分自身にかける言葉（セルフ・トーク）を意識的に変えてみましょう。「できない」と絶望する代わりに、「まだできないだけだ」と言い換えてください。この「まだ（Not yet）」という一言が、あなたの脳に未来への道筋を示します。学びは本来、一生続く刺激的な冒険です。目先の点数という小さな数字に一喜一憂するのではなく、昨日の自分よりも一歩でも遠くへ進めたことを誇りに思うこと。そのしなやかな強さこそが、大学受験というハードルを越えた先の、より広い世界であなたを支える真の知性となるでしょう。</p>
+
+        <a href="index.html" class="back-btn">ツールへ戻る</a>
+
+    </div>
+</div>
+
+<script>
+const saved = JSON.parse(localStorage.getItem('arSettings')) || {};
+const mode = saved.theme || 'auto';
+const isNight = new Date().getHours() >= 21 || new Date().getHours() < 7;
+const isLight = mode === 'light' || (mode === 'auto' && !isNight);
+
+if(isLight) document.body.classList.add('light-mode');
+
+const customDark = saved.colorDark || '#00f2ff';
+const customLight = saved.colorLight || '#0077cc';
+const activeThemeColor = isLight ? customLight : customDark;
+
+document.documentElement.style.setProperty('--sub', activeThemeColor);
+</script>
+
+</body>
+</html>
