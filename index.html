@@ -286,6 +286,26 @@ body.god-mode #main-crown img {
 html, body {
     overflow-x: hidden;
 }       
+input, button {
+    max-width: 100%;
+}
+
+a {
+    color: var(--sub);
+    text-decoration: underline;
+}
+
+body.light-mode a {
+    color: #0077cc;
+}
+
+body:not(.light-mode) a {
+    color: #00f2ff;
+}
+a:hover {
+    opacity: 0.8;
+}
+        
     </style>
 </head>
 <body>
@@ -549,7 +569,6 @@ function closeModal(e, id) {
     
 function unlockCrowns(level) {
 }
-    
     /* --- グローバル変数 --- */
     let selectedSeconds = 300, timerInterval = null, remainingTime = 0;
     let currentTaskObj = { name: "Ready?", color: "#39ff14", shared: false };
