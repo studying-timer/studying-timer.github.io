@@ -949,6 +949,29 @@ if (bg === '#000000' || bg === '#050505') {
         if(h*3600 + m*60 > 0) setPresetTime(h*3600 + m*60, null);
     }
 
+    // --- 追加：教科を直接選択する関数 ---
+function selectTaskDirectly(i) {
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    
+    // 選択された教科を現在のタスクにセット
+    currentTaskObj = tasks[i];
+    resetTimer(); // 念のためタイマーをリセット
+    isHistoryRecorded = false;
+
+    // UIの更新（スピン終了後と同じ状態にする）
+    document.documentElement.style.setProperty('--timer-color', currentTaskObj.color);
+    document.getElementById('result-text').innerHTML = `<span style="font-size:1rem; opacity:0.6;">START!</span><br>⭐ ${currentTaskObj.name} ⭐`;
+    
+    remainingTime = selectedSeconds; 
+    updateTimerDisplay();
+    
+    // タイマーセクションを表示
+    document.getElementById('timer-section').style.display = 'block';
+    
+    // スムーズにタイマー位置までスクロール（使い勝手向上のため）
+    document.getElementById('timer-section').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+    
     function spin() {
         if (!tasks.length) return;
         if (audioCtx.state === 'suspended') audioCtx.resume();
@@ -1045,20 +1068,25 @@ document.getElementById('result-text').innerText =
     }
 
     /* --- リスト・データ管理系関数 (変更なし) --- */
-    function updateListDisplay() {
-        document.getElementById('task-list-display').innerHTML = tasks.map((t, i) => 
-            `<div class="task-item">
-                <div class="task-info">
-                    <input type="color" class="task-color-input" value="${t.color}" oninput="updateTaskColor(${i}, this.value)">
-                    <span style="font-weight: bold;">${t.name}</span>
-                </div>
-                <div style="display:flex; align-items:center; gap:10px;">
-                    <span class="delete-btn" onclick="deleteTask(${i})">×</span>
-                </div>
-            </div>`
-        ).join('');
-        localStorage.setItem('myGachaTasks', JSON.stringify(tasks));
-    }
+    // --- 修正後：教科名をクリック可能にする ---
+function updateListDisplay() {
+    document.getElementById('task-list-display').innerHTML = tasks.map((t, i) => 
+        `<div class="task-item">
+            <div class="task-info">
+                <input type="color" class="task-color-input" value="${t.color}" oninput="updateTaskColor(${i}, this.value)">
+                <span style="font-weight: bold; cursor: pointer; text-decoration: underline dotted; color: var(--sub);" 
+                      onclick="selectTaskDirectly(${i})" 
+                      title="クリックしてこの教科を開始">
+                    ${t.name}
+                </span>
+            </div>
+            <div style="display:flex; align-items:center; gap:10px;">
+                <span class="delete-btn" onclick="deleteTask(${i})">×</span>
+            </div>
+        </div>`
+    ).join('');
+    localStorage.setItem('myGachaTasks', JSON.stringify(tasks));
+}
 function updateTaskColor(i, color) { 
     tasks[i].color = color; 
     localStorage.setItem('myGachaTasks', JSON.stringify(tasks)); 
