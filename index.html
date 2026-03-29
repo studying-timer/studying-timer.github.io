@@ -1015,8 +1015,8 @@ document.getElementById('result-text').innerText =
             
             // 経験値を加算 (1秒あたり 1/60分 * 倍率)
             if (currentTaskObj.name !== "Ready?" && currentTaskObj.name !== "休憩") {
-                sessionExp += (1 / 60) * buff;
-                currentSubjectSessionMin += (1 / 60) * buff; // 教科別の時間も加算
+                sessionExp += (1 / 60) * buff; // 経験値はバフあり
+                currentSubjectSessionMin += (1 / 60); // 教科別の時間は実時間（バフなし）に修正
                 updateExpVisuals(false);
             }
             
@@ -1199,23 +1199,97 @@ window.selectCrown = function(i) {
         let h = Math.floor(totalExp / 60);
         let m = Math.floor(totalExp % 60);
         document.getElementById('status-total-time').innerText = `${h}時間${m}分`;
-        // 教科別の時間表示を生成
+        // 教科別の時間表示・円グラフ生成
         let subjectTimes = JSON.parse(localStorage.getItem('stSubjectTimes')) || {};
-        let subjectListHtml = Object.keys(subjectTimes).map(name => {
-            let totalMin = subjectTimes[name];
-            let h = Math.floor(totalMin / 60);
-            let m = Math.floor(totalMin % 60);
-            return `<div style="display:flex; justify-content:space-between; margin-bottom:4px; border-bottom:1px solid rgba(255,255,255,0.05);">
-                        <span>${name}</span>
-                        <strong>${h}時間${m}分</strong>
-                    </div>`;
-        }).join('') || '<p style="color:#888;">まだ記録がありません</p>';
+        
+        // 系統の定義と集計用オブジェクト
+        const groups = {
+            "国語系": { color: "#ff4444", time: 0, keywords: ["国語", "現代文", "古典"] },
+            "数学系": { color: "#4444ff", time: 0, keywords: ["数学"] },
+            "理科系": { color: "#39ff14", time: 0, keywords: ["理科", "生物", "化学", "物理", "地学"] },
+            "社会系": { color: "#ffaa00", time: 0, keywords: ["社会", "地歴", "公共", "倫理", "政経", "地理", "公民"] },
+            "英語系": { color: "#aa44ff", time: 0, keywords: ["英語"] },
+            "情報系": { color: "#00ffff", time: 0, keywords: ["情報", "技術"] },
+            "その他": { color: "#888888", time: 0, keywords: [] }
+        };
 
-        // 実績セクションに注入
+        let totalChartTime = 0;
+        let subjectListHtml = "";
+        
+        // 時間が多い順にソートしてリスト作成＆系統へ振り分け
+        let sortedSubjects = Object.keys(subjectTimes).sort((a, b) => subjectTimes[b] - subjectTimes[a]);
+        
+        if (sortedSubjects.length > 0) {
+            sortedSubjects.forEach(name => {
+                let totalMin = subjectTimes[name];
+                let h = Math.floor(totalMin / 60);
+                let m = Math.floor(totalMin % 60);
+                
+                // リストHTML（文字色やボーダーをモードに追従させる）
+                subjectListHtml += `<div style="display:flex; justify-content:space-between; margin-bottom:4px; padding-bottom:4px; border-bottom:1px solid var(--border);">
+                            <span style="color:var(--text);">${name}</span>
+                            <strong style="color:var(--text);">${h}時間${m}分</strong>
+                        </div>`;
+                
+                totalChartTime += totalMin;
+
+                // 系統の判定（キーワードが含まれているか）
+                let matched = false;
+                for (let gName in groups) {
+                    if (gName !== "その他" && groups[gName].keywords.some(kw => name.includes(kw))) {
+                        groups[gName].time += totalMin;
+                        matched = true;
+                        break;
+                    }
+                }
+                if (!matched) groups["その他"].time += totalMin;
+            });
+        } else {
+            subjectListHtml = '<p style="color:#888; text-align:center;">まだ記録がありません</p>';
+        }
+
+        // 円グラフ（conic-gradient）と凡例の生成
+        let chartHtml = "";
+        if (totalChartTime > 0) {
+            let conicStops = [];
+            let currentPercent = 0;
+            
+            for (let gName in groups) {
+                if (groups[gName].time > 0) {
+                    let pct = (groups[gName].time / totalChartTime) * 100;
+                    conicStops.push(`${groups[gName].color} ${currentPercent}% ${currentPercent + pct}%`);
+                    currentPercent += pct;
+                }
+            }
+            
+            let legendHtml = Object.keys(groups).map(gName => {
+                if (groups[gName].time > 0) {
+                    return `<div style="display:flex; align-items:center; gap:5px; font-size:0.75rem; color:var(--text);">
+                                <span style="display:inline-block; width:10px; height:10px; background:${groups[gName].color}; border-radius:50%;"></span>
+                                ${gName}
+                            </div>`;
+                }
+                return '';
+            }).join('');
+
+            chartHtml = `
+                <div style="display:flex; flex-direction:column; align-items:center; margin-bottom: 15px;">
+                    <div style="width: 120px; height: 120px; border-radius: 50%; background: conic-gradient(${conicStops.join(', ')}); margin-bottom: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.3);"></div>
+                    <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:8px;">
+                        ${legendHtml}
+                    </div>
+                </div>
+            `;
+        }
+
+        // 実績セクションに注入（背景を見やすく、スクロール可能に）
         document.getElementById('status-perks').innerHTML = `
-            <div style="margin-top:10px; padding:10px; background:rgba(0,0,0,0.2); border-radius:8px;">
-                <h4 style="margin:0 0 8px 0; color:var(--sub); font-size:0.9rem;">📚 教科別累計時間</h4>
-                ${subjectListHtml}
+            <div style="margin-top:10px; padding:15px; background:rgba(128,128,128,0.1); border-radius:10px; border: 1px solid var(--border);">
+                <h4 style="margin:0 0 12px 0; color:var(--sub); font-size:1rem; text-align:center;">📚 教科別累計時間</h4>
+                ${chartHtml}
+                <div style="max-height: 150px; overflow-y: auto; padding-right: 5px;">
+                    ${subjectListHtml}
+                </div>
             </div>
         `;
         
