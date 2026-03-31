@@ -565,17 +565,22 @@ function updateCrownDisplay() {
 
 function updateStatusCrown() {
     const el = document.getElementById('status-crown');
+    if (!el || !crowns) return;
 
-    if (!el || !crowns || !crownImages[crowns.selected]) return;
+    // 選択中のもの、なければ持っている中で最新（最後）のものを表示
+    let displayKey = crowns.selected;
+    if (displayKey === 'none' && crowns.owned.length > 0) {
+        displayKey = crowns.owned[crowns.owned.length - 1];
+    }
 
-    el.innerHTML = `
-        <img src="${crownImages[crowns.selected]}"
-        style="
-            width:60px;
-            height:60px;
-            object-fit:contain;
-        ">
-    `;
+    if (crownImages[displayKey]) {
+        el.innerHTML = `
+            <img src="${crownImages[displayKey]}" 
+            style="width:60px; height:60px; object-fit:contain; filter: drop-shadow(0 0 5px rgba(255,215,0,0.3));">
+        `;
+    } else {
+        el.innerHTML = `<div style="font-size:0.7rem; color:var(--sub); opacity:0.5;">No Crown</div>`;
+    }
 }
     
 function openModal(id) { 
@@ -600,6 +605,17 @@ function closeModal(e, id) {
 }
     
 function unlockCrowns(level) {
+    if (!crowns) return;
+    const newUnlocks = [];
+    if (level >= 10 && !crowns.owned.includes('bronze')) newUnlocks.push('bronze');
+    if (level >= 30 && !crowns.owned.includes('silver')) newUnlocks.push('silver');
+    if (level >= 50 && !crowns.owned.includes('gold')) newUnlocks.push('gold');
+    if (level >= 100 && !crowns.owned.includes('god')) newUnlocks.push('god');
+
+    if (newUnlocks.length > 0) {
+        crowns.owned = [...new Set([...crowns.owned, ...newUnlocks])];
+        localStorage.setItem('stCrowns', JSON.stringify(crowns));
+    }
 }
     /* --- グローバル変数 --- */
     let selectedSeconds = 300, timerInterval = null, remainingTime = 0;
@@ -768,6 +784,9 @@ for (let i = 1; i < crownImages.length; i++) {
         newOwned.push(i);
     }
 }
+        // ★ 以下の2行を追加してください
+    crowns.owned = newOwned;
+    localStorage.setItem('stCrowns', JSON.stringify(crowns));
 crowns.owned = newOwned;
 localStorage.setItem('stCrowns', JSON.stringify(crowns));
 // --- ここまで ---
@@ -1320,17 +1339,21 @@ else { title = "見習い"; }
 document.getElementById('status-title').innerText = title;
         
 const sc = document.getElementById('status-crown');
-        
-if (sc && crownImages[crowns.selected]) {
-    sc.innerHTML = `
-        <img src="${crownImages[crowns.selected]}"
-        style="
-            width:60px;
-            height:60px;
-            object-fit:contain;
-        ">
-    `;
-}
+    if (sc) {
+        // 選択中が 'none' の場合、持っている中で最大のインデックス（最新の王冠）を表示
+        let displayIdx = crowns.selected;
+        if (displayIdx === 'none' && crowns.owned.length > 0) {
+            displayIdx = Math.max(...crowns.owned);
+        }
+
+        if (crownImages[displayIdx]) {
+            sc.innerHTML = `
+                <img src="${crownImages[displayIdx]}"
+                style="width:60px; height:60px; object-fit:contain; filter: drop-shadow(0 0 5px rgba(255,215,0,0.3));">
+            `;
+        } else {
+            sc.innerHTML = `<div style="font-size:0.7rem; color:var(--sub); opacity:0.5;">No Crown</div>`;
+        }
     }
 
 const GAS_URL = "https://script.google.com/macros/s/AKfycbyKqP_L_WzD4FMbg0R6cwum0PLp7THeuK2u3Am70Yp-exsUQu414ph7srfAm6evBXd6MA/exec"; // ここにGASのURLを貼る
