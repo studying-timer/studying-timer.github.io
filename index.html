@@ -1161,7 +1161,7 @@ function loadTemplate(name) {
 
     // ステータス画面の生成
     function renderStatusModal() {
-        let totalExp = parseFloat(localStorage.getItem('stTotalExp')) || 0;
+       
         let data = getLevelData(totalExp);
         let buff = getBuffMultiplier();
         let days = parseInt(localStorage.getItem('stConsecutiveDays')) || 0;
