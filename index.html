@@ -1469,14 +1469,14 @@ function renderUserIcon() {
     oscillator.stop(audioCtx.currentTime + duration / 1000);
 }   
         window.onload = function() {
-    updateCrownDisplay();
-};
+        updateCrownDisplay();
+    };
+
     window.debugSetLevel = function(lv) {
-    let fakeExp = requiredTotalExp(lv);
-    localStorage.setItem('stTotalExp', fakeExp);
-    updateExpVisuals(true);
-    }
-};
+        let fakeExp = requiredTotalExp(lv);
+        localStorage.setItem('stTotalExp', fakeExp);
+        updateExpVisuals(true);
+    };
 </script>
 </body>
 </html>
