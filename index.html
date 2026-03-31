@@ -634,10 +634,13 @@ function unlockCrowns(level) {
     {name:"社会", color:"#ff66ff"}
 ];
 
-let crowns = JSON.parse(localStorage.getItem('stCrowns')) || {
-    owned: [0],
-    selected: 0
-};
+let crowns = JSON.parse(localStorage.getItem('stCrowns')) || { owned: [0], selected: 0 };
+
+// データが古い形式（文字列など）の場合、安全のためにリセット
+if (typeof crowns.selected !== 'number' || (crowns.owned.length > 0 && typeof crowns.owned[0] !== 'number')) {
+    crowns = { owned: [0], selected: 0 };
+    localStorage.setItem('stCrowns', JSON.stringify(crowns));
+}
 
 const crownImages = [
     "images/crowns/crown1.png",
@@ -778,17 +781,16 @@ function getLevelData(exp) {
 
 // --- 修正後 ---
 // 一旦所有リストをリセットして、レベルに応じた王冠を追加
-let newOwned = [0]; // 初期王冠(index 0)は常に所有
-for (let i = 1; i < crownImages.length; i++) {
-    if (level >= i * 10) {
-        newOwned.push(i);
+let newOwned = [0]; 
+    for (let i = 1; i < 10; i++) {
+        if (level >= i * 10) {
+            newOwned.push(i);
+        }
     }
-}
-        // ★ 以下の2行を追加してください
+    
+    // 既存の選択状態を維持しつつ、所有リストを更新
     crowns.owned = newOwned;
     localStorage.setItem('stCrowns', JSON.stringify(crowns));
-crowns.owned = newOwned;
-localStorage.setItem('stCrowns', JSON.stringify(crowns));
 // --- ここまで ---
         
 localStorage.setItem('stCrowns', JSON.stringify(crowns));
@@ -1213,7 +1215,31 @@ function loadTemplate(name) {
             return `<img src="${crownImages[i]}" style="${style}" onclick="selectCrown(${i})">`;
         }).join('');
     }
+const crownList = document.getElementById('crownList');
+    crownList.innerHTML = '';
 
+    // 10個の王冠枠を作成
+    for (let i = 0; i < 10; i++) {
+        const item = document.createElement('div');
+        item.className = 'crown-item';
+        
+        // 所有しているかチェック
+        const isOwned = crowns.owned.includes(i);
+        const isSelected = (crowns.selected === i);
+
+        // 画像のインデックスは 0-9 なので、ファイル名は i+1 (1-10) にする
+        const imgNum = i + 1;
+        const imgSrc = `images/crowns/crown${imgNum}.png`;
+
+        item.innerHTML = `
+            <img src="${imgSrc}" 
+                 style="filter: ${isOwned ? 'none' : 'grayscale(1) opacity(0.3)'};"
+                 onclick="${isOwned ? `selectCrown(${i})` : ''}">
+            ${isSelected ? '<div class="selected-mark">装着中</div>' : ''}
+        `;
+        crownList.appendChild(item);
+    }
+        
     // --- 4. 教科別の時間表示・円グラフ生成 ---
     let subjectTimes = JSON.parse(localStorage.getItem('stSubjectTimes')) || {};
     const groups = {
@@ -1336,9 +1362,10 @@ async function uploadScore(userName, score) {
     try {
         await fetch(GAS_URL, {
             method: "POST",
+            mode: "no-cors", // これを追加するとブラウザのブロックを回避しやすくなります
+            headers: { "Content-Type": "text/plain" },
             body: JSON.stringify({ name: userName, score: score })
         });
-        console.log("スコアを送信しました");
     } catch (e) {
         console.error("送信エラー:", e);
     }
