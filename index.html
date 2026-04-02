@@ -1468,6 +1468,58 @@ function renderUserIcon() {
     location.reload();
 }
 };
+
+    const GAS_URL = "ここに新しく発行したURLを貼り付け";
+
+// スコアを送信する関数
+async function uploadScore(userName, score) {
+    // 【対策】名前が「ゲスト」または空の場合は送信を中止する
+    if(!userName || userName === "ゲスト" || userName.trim() === "") {
+        console.log("ゲストユーザーのためランキング送信をスキップしました");
+        return;
+    }
+    
+    if(!GAS_URL || GAS_URL.includes("ここに")) return;
+
+    try {
+        await fetch(GAS_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "text/plain" },
+            body: JSON.stringify({ name: userName, score: score })
+        });
+        console.log("スコアを送信しました:", userName, score);
+    } catch (e) { 
+        console.error("送信エラー:", e); 
+    }
+}
+
+// ランキングを取得して表示する関数
+async function updateOnlineRanking() {
+    const rankingEl = document.getElementById('online-ranking-list');
+    if (!rankingEl || !GAS_URL || GAS_URL.includes("ここに")) return;
+
+    try {
+        const response = await fetch(GAS_URL);
+        const data = await response.json();
+        
+        rankingEl.innerHTML = ''; 
+        if (data.length === 0) {
+            rankingEl.innerHTML = '<p style="color:#888; text-align:center;">まだデータがありません</p>';
+            return;
+        }
+
+        data.forEach((user, index) => {
+            const row = document.createElement('div');
+            row.style.cssText = "display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px solid rgba(255,255,255,0.05);";
+            let rank = (index < 3) ? ['🥇','🥈','🥉'][index] : `${index+1}位`;
+            row.innerHTML = `<span>${rank} ${user.name}</span><strong>${Math.floor(user.score)} min</strong>`;
+            rankingEl.appendChild(row);
+        });
+    } catch (e) {
+        rankingEl.innerHTML = '<p style="color:#888; text-align:center;">読み込みに失敗しました。GASの公開設定を確認してください。</p>';
+    }
+}
         window.onload = function() {
         updateCrownDisplay();
     };
@@ -1477,6 +1529,8 @@ function renderUserIcon() {
         localStorage.setItem('stTotalExp', fakeExp);
         updateExpVisuals(true);
     };
+    updateOnlineRanking();
+}
 </script>
 </body>
 </html>
