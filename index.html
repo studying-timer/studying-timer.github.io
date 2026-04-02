@@ -1324,43 +1324,54 @@ window.selectCrown = function(i) {
     renderStatusModal(); 
 };
 
-const GAS_URL = "https://script.google.com/macros/s/AKfycbyKqP_L_WzD4FMbg0R6cwum0PLp7THeuK2u3Am70Yp-exsUQu414ph7srfAm6evBXd6MA/exec"; // ここにGASのURLを貼る
+const GAS_URL = "https://script.google.com/macros/s/AKfycbwqIhKSWO8sZ6g4Vvp-z6-K6Il4KxT1HQe_VxW54zNXFB9u8-c8eASUhhpCNROS962o/exec"; // ここにGASのURLを貼る
 
 // --- データを送信する関数 ---
+// 1. スコアを送信する関数（勉強が終わったタイミングや、モーダルを開く前などに実行）
 async function uploadScore(userName, score) {
     try {
         await fetch(GAS_URL, {
             method: "POST",
-            mode: "no-cors", // これを追加するとブラウザのブロックを回避しやすくなります
+            mode: "no-cors",
             headers: { "Content-Type": "text/plain" },
             body: JSON.stringify({ name: userName, score: score })
         });
+        console.log("スコアを送信しました");
     } catch (e) {
-        console.error("送信エラー:", e);
+        console.error("スコア送信エラー:", e);
     }
 }
 
-// --- ランキングを取得して表示する関数 ---
+// 2. ランキングを取得して表示する関数
 async function updateOnlineRanking() {
-    const rankingDisplay = document.getElementById('online-ranking-list');
-    if(!rankingDisplay) return;
+    const rankingEl = document.getElementById('online-ranking-list');
+    if (!rankingEl) return;
 
-    rankingDisplay.innerHTML = "読み込み中...";
-    
     try {
         const response = await fetch(GAS_URL);
-        const data = await response.json();
+        const rankingData = await response.json();
         
-        let html = "";
-        data.forEach((item, index) => {
-            html += `<div style="display:flex; justify-content:space-between; border-bottom:1px solid var(--border); padding:5px 0;">
-                        <span>${index + 1}位: ${item.name}</span>
-                        <strong>${Math.floor(item.score)}分</strong>
-                     </div>`;
+        rankingEl.innerHTML = ''; // 「読み込み中...」をクリア
+        
+        rankingData.forEach((user, index) => {
+            const item = document.createElement('div');
+            item.style.cssText = "display:flex; justify-content:space-between; border-bottom:1px solid #444; padding:5px 0;";
+            
+            // 上位3位まではメダルをつけるなどの装飾
+            let rankMark = `${index + 1}位`;
+            if (index === 0) rankMark = '🥇 1位';
+            if (index === 1) rankMark = '🥈 2位';
+            if (index === 2) rankMark = '🥉 3位';
+
+            item.innerHTML = `
+                <span>${rankMark} : ${user.name}</span>
+                <strong>${user.score} pt</strong>
+            `;
+            rankingEl.appendChild(item);
         });
-        rankingDisplay.innerHTML = html || "データがありません";
     } catch (e) {
-        rankingDisplay.innerHTML = "読み込みエラー";
+        console.error("ランキング取得エラー:", e);
+        rankingEl.innerHTML = '<p style="color:red;">ランキングの取得に失敗しました</p>';
     }
 }
         
