@@ -1353,100 +1353,41 @@ async function uploadScore(userName, score) {
 }
 
 // 2. ランキングを取得して表示する関数
-async function updateOnlineRanking() {
-    const rankingEl = document.getElementById('online-ranking-list');
-    // ループ防止：関数内で自分自身（updateOnlineRanking）を呼び出さないこと！
-    if (!rankingEl || !GAS_URL || GAS_URL.includes("ここに")) return;
-
-    try {
-        // GASからのデータ取得
-        const response = await fetch(GAS_URL, {
-            method: "GET",
-            headers: { "Accept": "application/json" }
-        });
-
-        if (!response.ok) throw new Error('Network response was not ok');
-
-        const data = await response.json();
-        
-        rankingEl.innerHTML = ''; 
-        if (!data || data.length === 0) {
-            rankingEl.innerHTML = '<p style="color:#888; text-align:center;">データがまだありません</p>';
-            return;
-        }
-
-        data.forEach((user, index) => {
-            const row = document.createElement('div');
-            row.style.cssText = "display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px solid rgba(255,255,255,0.05);";
-            let rank = (index < 3) ? ['🥇','🥈','🥉'][index] : `${index+1}位`;
-            row.innerHTML = `<span>${rank} ${user.name}</span><strong>${Math.floor(user.score)} min</strong>`;
-            rankingEl.appendChild(row);
-        });
-    } catch (e) {
-        console.error("ランキング取得エラー:", e);
-        rankingEl.innerHTML = '<p style="color:#888; text-align:center;">ランキングの取得に失敗しました</p>';
-    }
-}
-        
-
-    function shareOnSNS() {
-        const min = Math.floor(selectedSeconds / 60);
-        let text = `Studying Timerで「${currentTaskObj.name}」を${min}分達成しました！(現在のLv.${document.getElementById('main-lv').innerText})`;
-        window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&hashtags=StudyingTimer`, '_blank');
-    }
-
-    function playTone(freq, dur, type='sine', mode='tick') {
+        async function updateOnlineRanking() {
+        const rankingEl = document.getElementById('online-ranking-list');
+        if (!rankingEl) return;
+        rankingEl.innerHTML = '<p style="color:#888; text-align:center;">読み込み中...</p>';
         try {
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-            if (mode === 'tick' && !document.getElementById('tick-on').checked) return;
-            if (mode === 'alarm' && !document.getElementById('alarm-on').checked) return;
-            const maxVol = parseFloat(mode === 'tick' ? document.getElementById('tick-vol').value : document.getElementById('alarm-vol').value) || 0.5;
-            const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
-            osc.type = type; osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-            gain.gain.setValueAtTime(maxVol, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
-            osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + dur);
-        } catch(e) {}
+            let res = await fetch(GAS_URL);
+            let data = await res.json();
+            rankingEl.innerHTML = '';
+            
+            data.forEach((user, index) => {
+                const row = document.createElement('div');
+                row.style.cssText = "display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px solid rgba(255,255,255,0.05);";
+                let rank = (index < 3) ? ['🥇','🥈','🥉'][index] : `${index+1}位`;
+                row.innerHTML = `<span>${rank} ${user.name}</span><strong>${Math.floor(user.score)} min</strong>`;
+                rankingEl.appendChild(row);
+            });
+        } catch (e) {
+            rankingEl.innerHTML = '<p style="color:#888; text-align:center;">読み込みに失敗しました。GASの公開設定を確認してください。</p>';
+        }
     }
-    
 
-
-    // 初期化処理
-    loadSettings(); 
-    updateListDisplay(); 
-    updateTemplateDisplay();
-    checkConsecutiveDays();
-    updateExpVisuals(false);
-    const savedIcon = localStorage.getItem('userIcon');
-if (savedIcon) {
-    document.getElementById('user-icon').src = savedIcon;
-    document.getElementById('user-icon').style.display = 'block';
-    document.getElementById('default-user-icon').style.display = 'none';
-}
-
-    function setHeaderImage(file) {
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        localStorage.setItem('userIcon', e.target.result);
-        renderUserIcon();
-    };
-    reader.readAsDataURL(file);
-}
-
-function renderUserIcon() {
-    const imgData = localStorage.getItem('userIcon');
-    const img = document.getElementById('user-icon');
-    const def = document.getElementById('default-user-icon');
-
-    if (imgData) {
-        img.src = imgData;
-        img.style.display = 'block';
-        def.style.display = 'none';
-    } else {
-        img.style.display = 'none';
-        def.style.display = 'block';
+    function renderUserIcon() {
+        const iconData = localStorage.getItem('stUserIcon');
+        const img = document.getElementById('sidebar-user-icon');
+        const def = document.getElementById('sidebar-default-icon');
+        if(iconData && img && def) {
+            img.src = iconData;
+            img.style.display = 'block';
+            def.style.display = 'none';
+        } else {
+            img.style.display = 'none';
+            def.style.display = 'block';
+        }
     }
-}
-        renderUserIcon();
+    renderUserIcon();
 
     /* --- 開発者用 デバッグコマンド --- */
     window.dev = {
@@ -1468,35 +1409,16 @@ function renderUserIcon() {
             console.log(`[DEV] Consecutive Days set to ${days}`);
         },
         reset: function(){
-    localStorage.removeItem('stTotalExp');
-    localStorage.removeItem('stConsecutiveDays');
-    localStorage.removeItem('stLastRunDate');
-    location.reload();
-}
-};
+            localStorage.removeItem('stTotalExp');
+            localStorage.removeItem('stConsecutiveDays');
+            localStorage.removeItem('stLastRunDate');
+            location.reload();
+        }
+    };
 
-        data.forEach((user, index) => {
-            const row = document.createElement('div');
-            row.style.cssText = "display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px solid rgba(255,255,255,0.05);";
-            let rank = (index < 3) ? ['🥇','🥈','🥉'][index] : `${index+1}位`;
-            row.innerHTML = `<span>${rank} ${user.name}</span><strong>${Math.floor(user.score)} min</strong>`;
-            rankingEl.appendChild(row);
-        });
-    } catch (e) {
-        rankingEl.innerHTML = '<p style="color:#888; text-align:center;">読み込みに失敗しました。GASの公開設定を確認してください。</p>';
-    }
-}
-        window.onload = function() {
+    window.onload = function() {
         updateCrownDisplay();
     };
-
-    window.debugSetLevel = function(lv) {
-        let fakeExp = requiredTotalExp(lv);
-        localStorage.setItem('stTotalExp', fakeExp);
-        updateExpVisuals(true);
-    };
-    updateOnlineRanking();
-}
 </script>
 </body>
 </html>
